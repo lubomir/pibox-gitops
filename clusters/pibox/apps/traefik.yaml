@@ -13,6 +13,10 @@ spec:
     targetRevision: 23.0.1
     helm:
       values: |
+        providers:
+          kubernetesIngress:
+            publishedService:
+              enabled: true
         ports:
           web:
             redirectTo: websecure
