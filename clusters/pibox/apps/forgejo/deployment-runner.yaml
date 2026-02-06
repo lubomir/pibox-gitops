@@ -1,0 +1,78 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: forgejo-runner
+  namespace: forgejo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: forgejo-runner
+  template:
+    metadata:
+      labels:
+        app: forgejo-runner
+    spec:
+      containers:
+        - name: runner
+          image: code.forgejo.org/forgejo/runner:3.5.1
+          command:
+            - /bin/sh
+            - -c
+          args:
+            - |
+              # Wait for Forgejo to be ready
+              while ! wget -q --spider http://forgejo-http/api/healthz 2>/dev/null; do
+                echo "Waiting for Forgejo to be ready..."
+                sleep 5
+              done
+
+              # Register runner if not already registered
+              if [ ! -f /data/.runner ]; then
+                forgejo-runner register \
+                  --no-interactive \
+                  --instance http://forgejo-http \
+                  --token "${RUNNER_TOKEN}" \
+                  --name "k8s-runner-1" \
+                  --labels "ubuntu-latest:docker://node:20-bookworm,ubuntu-22.04:docker://node:20-bookworm"
+              fi
+
+              # Start the runner
+              forgejo-runner daemon
+          env:
+            - name: RUNNER_TOKEN
+              valueFrom:
+                secretKeyRef:
+                  key: RUNNER_TOKEN
+                  name: forgejo-runner-secret
+            - name: DOCKER_HOST
+              value: tcp://localhost:2376
+            - name: DOCKER_CERT_PATH
+              value: /certs/client
+            - name: DOCKER_TLS_VERIFY
+              value: "1"
+          volumeMounts:
+            - mountPath: /data
+              name: runner-data
+            - mountPath: /certs
+              name: docker-certs
+        - name: dind
+          image: docker:24-dind
+          securityContext:
+            privileged: true
+          env:
+            - name: DOCKER_TLS_CERTDIR
+              value: /certs
+          volumeMounts:
+            - mountPath: /var/lib/docker
+              name: runner-data
+              subPath: docker
+            - mountPath: /certs
+              name: docker-certs
+      volumes:
+        - name: runner-data
+          persistentVolumeClaim:
+            claimName: forgejo-runner-data
+        - name: docker-certs
+          emptyDir: {}
