@@ -7,7 +7,7 @@ metadata:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
     traefik.ingress.kubernetes.io/router.tls: "true"
   name: weight-watcher-ingress
-  namespace: weight-watcher-ingress
+  namespace: weight-watcher
 spec:
   ingressClassName: my-traefik
   rules:
