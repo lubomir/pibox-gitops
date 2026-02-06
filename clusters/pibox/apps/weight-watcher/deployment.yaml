@@ -1,0 +1,46 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+  name: weight-watcher
+  namespace: weight-watcher
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: weight-watcher
+  template:
+    metadata:
+      labels:
+        app: weight-watcher
+    spec:
+      containers:
+      - env:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              key: databaseUrl
+              name: weight-watcher-secret
+        - name: AUTH_TOKEN
+          valueFrom:
+            secretKeyRef:
+              key: authToken
+              name: weight-watcher-secret
+        image: docker.io/lsedlar/weight-watcher-rs:latest
+        imagePullPolicy: Always
+        name: weight-watcher
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /
+            port: 8080
+            scheme: HTTP
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 1
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
