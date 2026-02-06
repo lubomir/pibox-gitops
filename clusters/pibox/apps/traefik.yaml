@@ -15,8 +15,7 @@ spec:
       values: |
         ports:
           web:
-            redirectTo:
-              port: websecure
+            redirectTo: websecure
 
   destination:
     server: https://kubernetes.default.svc
