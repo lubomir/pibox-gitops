@@ -35,7 +35,7 @@ spec:
                   --instance http://forgejo-http \
                   --token "${RUNNER_TOKEN}" \
                   --name "k8s-runner-1" \
-                  --labels "ubuntu-latest:docker://node:20-bookworm,ubuntu-22.04:docker://node:20-bookworm"
+                  --labels "docker:docker://node:20-bookworm"
               fi
 
               # Start the runner
