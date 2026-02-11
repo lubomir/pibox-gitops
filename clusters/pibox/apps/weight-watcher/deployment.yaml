@@ -21,7 +21,7 @@ spec:
           valueFrom:
             secretKeyRef:
               key: databaseUrl
-              name: weight-watcher-secret
+              name: weightwatcher-postgres-weightwatcher-db-user
         - name: AUTH_TOKEN
           valueFrom:
             secretKeyRef:
