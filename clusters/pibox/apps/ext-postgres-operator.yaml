@@ -1,0 +1,31 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ext-postgres-operator
+  namespace: argocd
+spec:
+  project: default
+
+  sources:
+    - repoURL: https://github.com/lubomir/pibox-gitops.git
+      targetRevision: main
+      path: clusters/pibox/apps/ext-postgres-operator
+
+    - repoURL: https://movetokube.github.io/postgres-operator/
+      chart: ext-postgres-operator
+      targetRevision: 3.0.0
+      helm:
+        values: |
+          existingSecret: "ext-postgres-operator-secret"
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: operators
+
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
