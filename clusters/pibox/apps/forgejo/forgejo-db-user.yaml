@@ -1,0 +1,17 @@
+---
+apiVersion: db.movetokube.com/v1alpha1
+kind: PostgresUser
+metadata:
+  name: forgejo-db-user
+  namespace: forgejo
+spec:
+  role: forgejo
+  database: forgejo-db
+  secretName: forgejo-postgres
+  privileges: OWNER
+  secretTemplate:
+    POSTGRES_HOST: "postgresql.postgresql.svc.cluster.local"
+    POSTGRES_PORT: "5432"
+    POSTGRES_DB: "forgejo"
+    POSTGRES_USER: "{{.Role}}"
+    POSTGRES_PASSWORD: "{{.Password}}"

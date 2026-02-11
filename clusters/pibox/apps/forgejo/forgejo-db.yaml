@@ -1,0 +1,10 @@
+---
+apiVersion: db.movetokube.com/v1alpha1
+kind: Postgres
+metadata:
+  name: forgejo-db
+  namespace: forgejo
+spec:
+  database: forgejo
+  dropOnDelete: false
+  masterRole: forgejo
