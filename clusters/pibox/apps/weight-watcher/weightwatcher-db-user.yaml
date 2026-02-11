@@ -1,0 +1,13 @@
+---
+apiVersion: db.movetokube.com/v1alpha1
+kind: PostgresUser
+metadata:
+  name: weightwatcher-db-user
+  namespace: weight-watcher
+spec:
+  role: weightwatcher
+  database: weightwatcher-db
+  secretName: weightwatcher-postgres
+  privileges: OWNER
+  secretTemplate:
+    databaseUrl: "postgres://{{.Role}}:{{.Password}}@{{.Host}}/{{.Database}}"
