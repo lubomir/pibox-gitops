@@ -53,27 +53,27 @@ spec:
               valueFrom:
                 secretKeyRef:
                   key: POSTGRES_HOST
-                  name: forgejo-secrets
+                  name: forgejo-postgres-forgejo-db-user
             - name: FORGEJO__database__PORT
               valueFrom:
                 secretKeyRef:
                   key: POSTGRES_PORT
-                  name: forgejo-secrets
+                  name: forgejo-postgres-forgejo-db-user
             - name: FORGEJO__database__NAME
               valueFrom:
                 secretKeyRef:
                   key: POSTGRES_DB
-                  name: forgejo-secrets
+                  name: forgejo-postgres-forgejo-db-user
             - name: FORGEJO__database__USER
               valueFrom:
                 secretKeyRef:
                   key: POSTGRES_USER
-                  name: forgejo-secrets
+                  name: forgejo-postgres-forgejo-db-user
             - name: FORGEJO__database__PASSWD
               valueFrom:
                 secretKeyRef:
                   key: POSTGRES_PASSWORD
-                  name: forgejo-secrets
+                  name: forgejo-postgres-forgejo-db-user
             - name: FORGEJO__mailer__ENABLED
               value: "true"
             - name: FORGEJO__mailer__PROTOCOL
