@@ -7,7 +7,7 @@ metadata:
     cert-manager.io/cluster-issuer: letsencrypt
 spec:
   rules:
-    - host: grafana-2.paas.lsedlar.cz
+    - host: grafana.paas.lsedlar.cz
       http:
         paths:
           - backend:
@@ -18,5 +18,5 @@ spec:
             pathType: ImplementationSpecific
   tls:
     - hosts:
-        - grafana-2.paas.lsedlar.cz
+        - grafana.paas.lsedlar.cz
       secretName: grafana-ingress
