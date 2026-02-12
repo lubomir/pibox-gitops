@@ -1,0 +1,55 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana
+  labels:
+    app: grafana
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: grafana
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      containers:
+        - name: grafana
+          image: grafana/grafana-oss:11.2.0
+          ports:
+            - name: http
+              containerPort: 3000
+          env:
+            - name: GF_PATHS_CONFIG
+              value: /etc/grafana/grafana.ini
+            - name: GF_INSTALL_PLUGINS
+              value: grafana-kubernetes-app
+            - name: GF_SMTP_ENABLED
+              value: "true"
+            - name: GF_SMTP_HOST
+              value: smtp.gmail.com:587
+            - name: GF_SMTP_USER
+              valueFrom:
+                secretKeyRef:
+                  name: grafana-smtp-secret
+                  key: SMTP_USER
+            - name: GF_SMTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: grafana-smtp-secret
+                  key: SMTP_PASSWORD
+            - name: GF_SMTP_FROM_ADDRESS
+              value: lubomir.sedlar+grafana@gmail.com
+            - name: GF_SMTP_SKIP_VERIFY
+              value: "true"
+          volumeMounts:
+            - name: grafana-pv
+              mountPath: /var/lib/grafana
+      volumes:
+        - name: grafana-pv
+          persistentVolumeClaim:
+            claimName: grafana-pvc
