@@ -1,0 +1,29 @@
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: weather-downsample
+  namespace: weather-station
+spec:
+  schedule: "0 2 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 14
+  failedJobsHistoryLimit: 14
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: downsample
+            image: docker.io/lsedlar/weather-station-receiver:latest
+            imagePullPolicy: Always
+            command:
+            - python
+            - /app/downsampler.py
+            env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  key: databaseUrl
+                  name: weather-station-postgres-weather-station-db-user
+          restartPolicy: OnFailure

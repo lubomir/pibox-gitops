@@ -1,0 +1,70 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: receiver
+  namespace: weather-station
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: receiver
+  template:
+    metadata:
+      labels:
+        app: receiver
+    spec:
+      containers:
+      - env:
+        - name: TARGET_DIR
+          value: /storage
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              key: databaseUrl
+              name: weather-station-postgres-weather-station-db-user
+        - name: TUYA_ACCESS_ID
+          valueFrom:
+            secretKeyRef:
+              key: tuyaAccessId
+              name: weather-station-secret
+        - name: TUYA_ACCESS_SECRET
+          valueFrom:
+            secretKeyRef:
+              key: tuyaAccessSecret
+              name: weather-station-secret
+        - name: TUYA_DEVICE_ID
+          valueFrom:
+            secretKeyRef:
+              key: tuyaDeviceId
+              name: weather-station-secret
+        - name: AUTH_TOKEN
+          valueFrom:
+            secretKeyRef:
+              key: authToken
+              name: weather-station-secret
+        image: docker.io/lsedlar/weather-station-receiver:latest
+        imagePullPolicy: Always
+        name: receiver
+        ports:
+        - containerPort: 8000
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /status-check
+            port: 8000
+            scheme: HTTP
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          successThreshold: 1
+          timeoutSeconds: 1
+        volumeMounts:
+        - mountPath: /storage
+          name: storage
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: storage
+        persistentVolumeClaim:
+          claimName: weather-station-data

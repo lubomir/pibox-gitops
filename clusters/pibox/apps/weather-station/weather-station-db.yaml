@@ -1,0 +1,10 @@
+---
+apiVersion: db.movetokube.com/v1alpha1
+kind: Postgres
+metadata:
+  name: weather-station-db
+  namespace: weather-station
+spec:
+  database: weather_station
+  dropOnDelete: false
+  masterRole: weatherstation

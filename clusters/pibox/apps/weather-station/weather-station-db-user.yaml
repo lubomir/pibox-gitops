@@ -1,0 +1,13 @@
+---
+apiVersion: db.movetokube.com/v1alpha1
+kind: PostgresUser
+metadata:
+  name: weather-station-db-user
+  namespace: weather-station
+spec:
+  role: weatherstation
+  database: weather-station-db
+  secretName: weather-station-postgres
+  privileges: OWNER
+  secretTemplate:
+    databaseUrl: "postgres://{{.Role}}:{{.Password}}@{{.Host}}/{{.Database}}"

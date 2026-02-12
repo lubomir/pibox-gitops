@@ -1,0 +1,16 @@
+---
+apiVersion: db.movetokube.com/v1alpha1
+kind: PostgresUser
+metadata:
+  name: weather-station-db-grafana
+  namespace: weather-station
+spec:
+  role: weatherstation_grafana
+  database: weather-station-db
+  secretName: weather-station-grafana-postgres
+  privileges: READ
+  secretTemplate:
+    username: "{{.Role}}"
+    password: "{{.Password}}"
+    host: "{{.Host}}"
+    database: "{{.Database}}"

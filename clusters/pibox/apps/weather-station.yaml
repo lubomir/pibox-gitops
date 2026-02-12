@@ -1,0 +1,24 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: weather-station
+  namespace: argocd
+spec:
+  project: default
+
+  source:
+    repoURL: https://github.com/lubomir/pibox-gitops.git
+    targetRevision: main
+    path: clusters/pibox/apps/weather-station
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: weather-station
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
