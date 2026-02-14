@@ -18,15 +18,6 @@ spec:
     spec:
       securityContext:
         fsGroup: 1000
-      initContainers:
-      - name: fix-permissions
-        image: docker.io/lsedlar/weather-station-receiver:latest
-        command: ["chown", "-R", "1000:1000", "/storage"]
-        volumeMounts:
-        - mountPath: /storage
-          name: storage
-        securityContext:
-          runAsUser: 0
       containers:
       - env:
         - name: TARGET_DIR
