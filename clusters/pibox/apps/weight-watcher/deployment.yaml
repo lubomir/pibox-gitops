@@ -3,6 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   annotations:
+    ignore-check.kube-linter.io/latest-tag: "only latest tag is published"
   name: weight-watcher
   namespace: weight-watcher
 spec:
@@ -30,6 +31,16 @@ spec:
         image: docker.io/lsedlar/weight-watcher-rs:latest
         imagePullPolicy: Always
         name: weight-watcher
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          readOnlyRootFilesystem: true
+        resources:
+          requests:
+            cpu: 10m
+            memory: 64Mi
+          limits:
+            memory: 128Mi
         ports:
         - containerPort: 8080
           protocol: TCP
