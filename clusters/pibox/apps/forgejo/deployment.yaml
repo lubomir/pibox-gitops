@@ -130,7 +130,11 @@ spec:
           volumeMounts:
             - mountPath: /var/lib/gitea
               name: data
+            - mountPath: /tmp
+              name: tmp
       volumes:
+        - name: tmp
+          emptyDir: {}
         - name: data
           persistentVolumeClaim:
             claimName: forgejo-data
