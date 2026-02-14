@@ -26,4 +26,4 @@ spec:
                 secretKeyRef:
                   key: databaseUrl
                   name: weather-station-postgres-weather-station-db-user
-          restartPolicy: OnFailure
+          restartPolicy: Never
