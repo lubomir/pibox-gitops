@@ -17,6 +17,12 @@ spec:
       containers:
         - name: runner
           image: code.forgejo.org/forgejo/runner:3.5.1
+          resources:
+            requests:
+              cpu: 20m
+              memory: 64Mi
+            limits:
+              memory: 256Mi
           command:
             - /bin/sh
             - -c
@@ -61,6 +67,12 @@ spec:
           image: docker:24-dind
           securityContext:
             privileged: true
+          resources:
+            requests:
+              cpu: 20m
+              memory: 128Mi
+            limits:
+              memory: 512Mi
           env:
             - name: DOCKER_TLS_CERTDIR
               value: /certs

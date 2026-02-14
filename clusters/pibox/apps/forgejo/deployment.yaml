@@ -14,9 +14,21 @@ spec:
       labels:
         app: forgejo
     spec:
+      securityContext:
+        fsGroup: 1000
       containers:
         - name: forgejo
           image: codeberg.org/forgejo/forgejo:14-rootless
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 1000
+            readOnlyRootFilesystem: true
+          resources:
+            requests:
+              cpu: 50m
+              memory: 256Mi
+            limits:
+              memory: 512Mi
           ports:
             - containerPort: 3000
               name: http
