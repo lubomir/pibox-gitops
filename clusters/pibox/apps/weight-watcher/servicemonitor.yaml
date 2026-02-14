@@ -1,0 +1,13 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: weight-watcher-monitor
+  namespace: weight-watcher
+spec:
+  endpoints:
+    - path: /metrics
+      port: web
+  selector:
+    matchLabels:
+      app: weight-watcher
