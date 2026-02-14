@@ -2,6 +2,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  annotations:
+    ignore-check.kube-linter.io/latest-tag: "only latest tag is published"
   name: receiver
   namespace: weather-station
 spec:
@@ -14,6 +16,8 @@ spec:
       labels:
         app: receiver
     spec:
+      securityContext:
+        fsGroup: 1000
       containers:
       - env:
         - name: TARGET_DIR
@@ -46,6 +50,16 @@ spec:
         image: docker.io/lsedlar/weather-station-receiver:latest
         imagePullPolicy: Always
         name: receiver
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 1000
+          readOnlyRootFilesystem: true
+        resources:
+          requests:
+            cpu: 20m
+            memory: 64Mi
+          limits:
+            memory: 256Mi
         ports:
         - containerPort: 8000
           protocol: TCP
