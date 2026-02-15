@@ -1,0 +1,216 @@
+---
+- name: Set up pibox backups to Hetzner StorageBox
+  hosts: pibox
+  become: true
+
+  vars:
+    ssh_key_path: /root/.ssh/storagebox
+    backup_env_file: /etc/pibox-backup.env
+    backup_password_file: /etc/pibox-backup-password
+
+  tasks:
+    # --- Phase 1: Generate credentials ---
+
+    - name: Install sqlite3
+      ansible.builtin.package:
+        name: sqlite3
+        state: present
+
+    - name: Check installed restic version
+      ansible.builtin.command:
+        cmd: /usr/local/bin/restic version
+      register: restic_version_check
+      changed_when: false
+      failed_when: false
+
+    - name: Install restic from GitHub releases
+      when: restic_version_check.rc != 0 or 'restic 0.17.3' not in restic_version_check.stdout
+      block:
+        - name: Download restic binary
+          ansible.builtin.get_url:
+            url: https://github.com/restic/restic/releases/download/v0.17.3/restic_0.17.3_linux_arm64.bz2
+            dest: /tmp/restic.bz2
+            mode: "0644"
+
+        - name: Extract and install restic
+          ansible.builtin.shell:
+            cmd: bunzip2 -c /tmp/restic.bz2 > /usr/local/bin/restic && chmod +x /usr/local/bin/restic
+          args:
+            creates: /usr/local/bin/restic
+
+        - name: Clean up download
+          ansible.builtin.file:
+            path: /tmp/restic.bz2
+            state: absent
+
+    - name: Generate SSH key for StorageBox
+      community.crypto.openssh_keypair:
+        path: "{{ ssh_key_path }}"
+        type: ed25519
+        owner: root
+        mode: "0600"
+
+    - name: Check if backup is already configured
+      ansible.builtin.stat:
+        path: "{{ backup_env_file }}"
+      register: env_file
+
+    # --- First-time setup: interactive prompts ---
+
+    - name: Read StorageBox SSH public key
+      when: not env_file.stat.exists
+      ansible.builtin.slurp:
+        src: "{{ ssh_key_path }}.pub"
+      register: ssh_pubkey
+
+    - name: Prompt to create StorageBox
+      when: not env_file.stat.exists
+      ansible.builtin.pause:
+        prompt: |
+          ============================================================
+          Create your Hetzner StorageBox and add this SSH public key:
+
+            {{ ssh_pubkey.content | b64decode | trim }}
+
+          Then enter the StorageBox username (e.g. u123456)
+          ============================================================
+      register: storagebox_prompt
+
+    - name: Set StorageBox vars from user input
+      when: not env_file.stat.exists
+      ansible.builtin.set_fact:
+        storagebox_user: "{{ storagebox_prompt.user_input }}"
+
+    - name: Read StorageBox vars from existing config
+      when: env_file.stat.exists
+      block:
+        - name: Read existing env file
+          ansible.builtin.slurp:
+            src: "{{ backup_env_file }}"
+          register: existing_env
+
+        - name: Parse StorageBox username from env file
+          ansible.builtin.set_fact:
+            storagebox_user: "{{ existing_env.content | b64decode | regex_search('sftp:([^@]+)@', '\\1') | first }}"
+
+    - name: Set derived StorageBox vars
+      ansible.builtin.set_fact:
+        storagebox_host: "{{ storagebox_user }}.your-storagebox.de"
+        restic_repo: "sftp:{{ storagebox_user }}@{{ storagebox_user }}.your-storagebox.de:backups/pibox"
+
+    # --- Phase 2: Configure and save disaster recovery files ---
+
+    - name: Configure SSH for StorageBox
+      ansible.builtin.blockinfile:
+        path: /root/.ssh/config
+        create: true
+        mode: "0600"
+        marker: "# {mark} PIBOX BACKUP - STORAGEBOX"
+        block: |
+          Host {{ storagebox_host }}
+              Port 23
+              IdentityFile {{ ssh_key_path }}
+              StrictHostKeyChecking accept-new
+
+    - name: Generate restic password
+      ansible.builtin.copy:
+        dest: "{{ backup_password_file }}"
+        content: "{{ lookup('ansible.builtin.password', '/dev/null', length=32) }}"
+        force: false
+        owner: root
+        mode: "0600"
+
+    - name: Fetch SSH private key to control machine
+      ansible.builtin.fetch:
+        src: "{{ ssh_key_path }}"
+        dest: disaster-recovery/storagebox-key
+        flat: true
+
+    - name: Fetch restic password to control machine
+      ansible.builtin.fetch:
+        src: "{{ backup_password_file }}"
+        dest: disaster-recovery/restic-password
+        flat: true
+
+    - name: Show disaster recovery reminder
+      when: not env_file.stat.exists
+      ansible.builtin.pause:
+        prompt: |
+          ============================================================
+          Disaster recovery files saved to disaster-recovery/:
+
+            disaster-recovery/storagebox-key    - SSH key for StorageBox
+            disaster-recovery/restic-password   - Restic repository password
+
+          Store these somewhere safe (password manager, USB key, etc.)
+          and then DELETE the local copies. Without these files, backups
+          are unrecoverable if the Pi is lost.
+
+          Press Enter to continue.
+          ============================================================
+
+    # --- Phase 3: Deploy backup system ---
+
+    - name: Create backup environment file
+      ansible.builtin.copy:
+        dest: "{{ backup_env_file }}"
+        content: |
+          RESTIC_REPOSITORY={{ restic_repo }}
+          RESTIC_PASSWORD_FILE={{ backup_password_file }}
+        owner: root
+        mode: "0600"
+
+    - name: Install backup script
+      ansible.builtin.copy:
+        src: pibox-backup.sh
+        dest: /usr/local/bin/pibox-backup.sh
+        owner: root
+        mode: "0755"
+
+    - name: Install systemd service
+      ansible.builtin.copy:
+        src: pibox-backup.service
+        dest: /etc/systemd/system/pibox-backup.service
+        owner: root
+        mode: "0644"
+      notify: Reload systemd
+
+    - name: Install systemd timer
+      ansible.builtin.copy:
+        src: pibox-backup.timer
+        dest: /etc/systemd/system/pibox-backup.timer
+        owner: root
+        mode: "0644"
+      notify: Reload systemd
+
+    - name: Flush handlers before initializing restic
+      ansible.builtin.meta: flush_handlers
+
+    - name: Check if restic repo is initialized
+      ansible.builtin.command:
+        cmd: restic snapshots
+      environment:
+        RESTIC_REPOSITORY: "{{ restic_repo }}"
+        RESTIC_PASSWORD_FILE: "{{ backup_password_file }}"
+      register: restic_check
+      changed_when: false
+      failed_when: false
+
+    - name: Initialize restic repository
+      ansible.builtin.command:
+        cmd: restic init
+      environment:
+        RESTIC_REPOSITORY: "{{ restic_repo }}"
+        RESTIC_PASSWORD_FILE: "{{ backup_password_file }}"
+      when: restic_check.rc != 0
+
+    - name: Enable and start backup timer
+      ansible.builtin.systemd:
+        name: pibox-backup.timer
+        enabled: true
+        state: started
+
+  handlers:
+    - name: Reload systemd
+      ansible.builtin.systemd:
+        daemon_reload: true
