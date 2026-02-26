@@ -16,6 +16,7 @@ K3S_DB="/var/lib/rancher/k3s/server/db/state.db"
 K3S_SERVER_DIR="/var/lib/rancher/k3s/server"
 LOCAL_PATH_BASE="/var/lib/rancher/k3s/storage"
 SMB_STORAGE="/var/lib/rancher/storage"
+export RESTIC_CACHE_DIR="/var/lib/rancher/restic-cache"
 
 # Source environment (RESTIC_REPOSITORY, RESTIC_PASSWORD_FILE, etc.)
 if [ -f /etc/pibox-backup.env ]; then
