@@ -1,0 +1,42 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: renovate
+  namespace: argocd
+spec:
+  project: default
+
+  sources:
+    - repoURL: https://github.com/lubomir/pibox-gitops.git
+      targetRevision: main
+      path: clusters/pibox/apps/renovate
+
+    - repoURL: ghcr.io/renovatebot/charts
+      chart: renovate
+      targetRevision: 46.38.1
+      helm:
+        values: |
+          cronjob:
+            schedule: '0 */4 * * *'
+          renovate:
+            config: |
+              {
+                "platform": "forgejo",
+                "endpoint": "https://git.paas.lsedlar.cz/api/v1",
+                "autodiscover": true
+              }
+          envFrom:
+            - secretRef:
+                name: renovate-secret
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: renovate
+
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
