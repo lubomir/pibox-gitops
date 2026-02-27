@@ -26,6 +26,8 @@ spec:
                 "endpoint": "https://git.paas.lsedlar.cz/api/v1",
                 "autodiscover": true
               }
+          env:
+            RENOVATE_GIT_AUTHOR: 'Renovate Bot <noreply@lsedlar.cz>'
           envFrom:
             - secretRef:
                 name: renovate-secret
