@@ -51,6 +51,10 @@ spec:
               value: https://git.paas.lsedlar.cz/
             - name: FORGEJO__server__HTTP_PORT
               value: "3000"
+            - name: FORGEJO__repository__DISABLE_MIGRATIONS
+              value: "true"
+            - name: FORGEJO__repository__DISABLE_STARS
+              value: "true"
             - name: FORGEJO__service__DISABLE_REGISTRATION
               value: "true"
             - name: FORGEJO__service__REQUIRE_SIGNIN_VIEW
