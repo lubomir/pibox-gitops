@@ -63,9 +63,16 @@ spec:
     server: https://kubernetes.default.svc
     namespace: photoprism
 
+  ignoreDifferences:
+    - group: ""
+      kind: Secret
+      jsonPointers:
+        - /stringData
+        - /data
   syncPolicy:
     automated:
       prune: false
       selfHeal: true
     syncOptions:
       - CreateNamespace=true
+      - RespectIgnoreDifferences=true
