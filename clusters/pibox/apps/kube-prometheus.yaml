@@ -16,8 +16,8 @@ spec:
     helm:
       values: |
         prometheus:
-          retention: 365d
-          retentionSize: 50GiB
+          retention: 30d
+          retentionSize: 10GiB
           scrapeInterval: 30s
 
   destination:
