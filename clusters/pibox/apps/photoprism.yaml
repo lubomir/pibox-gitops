@@ -37,6 +37,16 @@ spec:
             - hosts:
                 - photos.paas.lsedlar.cz
               secretName: photoprism-cert
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsNonRoot: false
+          runAsUser: 0
+          runAsGroup: 0
+          capabilities:
+            drop:
+              - ALL
+          seccompProfile:
+            type: RuntimeDefault
         config:
           PHOTOPRISM_READONLY: true
           PHOTOPRISM_SITE_URL: https://photos.paas.lsedlar.cz/
