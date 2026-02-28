@@ -58,6 +58,7 @@ spec:
           PHOTOPRISM_SITE_URL: https://photos.paas.lsedlar.cz/
           PHOTOPRISM_SESSION_MAXAGE: "1209600"
           PHOTOPRISM_WORKERS: "1"
+          PHOTOPRISM_AUTO_INDEX: "86400"
 
   destination:
     server: https://kubernetes.default.svc
