@@ -1,0 +1,53 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: photoprism
+  namespace: argocd
+spec:
+  project: default
+
+  source:
+    repoURL: https://charts.photoprism.app/photoprism
+    chart: photoprism-plus
+    targetRevision: 1.0.3
+    helm:
+      values: |
+        persistence:
+          storage:
+            storageClassName: local-path
+          originals:
+            nfs:
+              enabled: true
+              server: 192.168.0.120
+              path: /var/lib/rancher/storage/L/Photos
+        ingress:
+          enabled: true
+          className: my-traefik
+          annotations:
+            cert-manager.io/cluster-issuer: letsencrypt
+            traefik.ingress.kubernetes.io/router.entrypoints: websecure
+            traefik.ingress.kubernetes.io/router.tls: "true"
+          hosts:
+            - host: photos.paas.lsedlar.cz
+              paths:
+                - path: /
+                  pathType: Prefix
+          tls:
+            - hosts:
+                - photos.paas.lsedlar.cz
+              secretName: photoprism-cert
+        config:
+          PHOTOPRISM_READONLY: true
+          PHOTOPRISM_SITE_URL: https://photos.paas.lsedlar.cz/
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: photoprism
+
+  syncPolicy:
+    automated:
+      prune: false
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
