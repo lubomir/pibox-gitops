@@ -22,6 +22,8 @@ spec:
           persistence:
             enabled: true
             size: 15Gi
+            annotations:
+              app: prometheus
 
   destination:
     server: https://kubernetes.default.svc
