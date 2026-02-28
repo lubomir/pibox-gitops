@@ -37,6 +37,12 @@ spec:
             - hosts:
                 - photos.paas.lsedlar.cz
               secretName: photoprism-cert
+        resources:
+          limits:
+            memory: 6Gi
+          requests:
+            cpu: 500m
+            memory: 512Mi
         securityContext:
           allowPrivilegeEscalation: false
           runAsNonRoot: false
@@ -51,6 +57,7 @@ spec:
           PHOTOPRISM_READONLY: true
           PHOTOPRISM_SITE_URL: https://photos.paas.lsedlar.cz/
           PHOTOPRISM_SESSION_MAXAGE: "1209600"
+          PHOTOPRISM_WORKERS: "1"
 
   destination:
     server: https://kubernetes.default.svc
