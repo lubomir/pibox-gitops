@@ -90,6 +90,12 @@ spec:
                 secretKeyRef:
                   key: POSTGRES_PASSWORD
                   name: forgejo-postgres-forgejo-db-user
+            - name: FORGEJO__service__ENABLE_TIMETRACKING
+              value: "false"
+            - name: FORGEJO__service__ENABLE_NOTIFY_MAIL
+              value: "true"
+            - name: FORGEJO__admin__DEFAULT_EMAIL_NOTIFICATIONS
+              value: enabled
             - name: FORGEJO__mailer__ENABLED
               value: "true"
             - name: FORGEJO__mailer__PROTOCOL
