@@ -60,6 +60,10 @@ spec:
       jsonPointers:
         - /stringData
         - /data
+    - group: apps
+      kind: Deployment
+      jsonPointers:
+        - /spec/replicas
   syncPolicy:
     automated:
       prune: false
