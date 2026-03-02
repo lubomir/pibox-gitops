@@ -7,58 +7,48 @@ metadata:
 spec:
   project: default
 
-  source:
-    repoURL: https://charts.photoprism.app/photoprism
-    chart: photoprism-plus
-    targetRevision: 1.0.3
-    helm:
-      values: |
-        persistence:
-          storage:
-            storageClassName: local-path
-          originals:
-            nfs:
-              enabled: true
-              server: 192.168.0.120
-              path: /var/lib/rancher/storage/L/Photos
-        ingress:
-          enabled: true
-          className: my-traefik
-          annotations:
-            cert-manager.io/cluster-issuer: letsencrypt
-            traefik.ingress.kubernetes.io/router.entrypoints: websecure
-            traefik.ingress.kubernetes.io/router.tls: "true"
-          hosts:
-            - host: photos.paas.lsedlar.cz
-              paths:
-                - path: /
-                  pathType: Prefix
-          tls:
-            - hosts:
-                - photos.paas.lsedlar.cz
-              secretName: photoprism-cert
-        resources:
-          limits:
-            memory: 6Gi
-          requests:
-            cpu: 500m
-            memory: 512Mi
-        securityContext:
-          allowPrivilegeEscalation: false
-          runAsNonRoot: false
-          runAsUser: 0
-          runAsGroup: 0
-          capabilities:
-            drop:
-              - ALL
-          seccompProfile:
-            type: RuntimeDefault
-        config:
-          PHOTOPRISM_READONLY: true
-          PHOTOPRISM_SITE_URL: https://photos.paas.lsedlar.cz/
-          PHOTOPRISM_SESSION_MAXAGE: "1209600"
-          PHOTOPRISM_WORKERS: "1"
-          PHOTOPRISM_AUTO_INDEX: "86400"
+  sources:
+    - repoURL: https://github.com/lubomir/pibox-gitops.git
+      targetRevision: main
+      path: clusters/pibox/apps/photoprism
+
+    - repoURL: https://charts.photoprism.app/photoprism
+      chart: photoprism-plus
+      targetRevision: 1.0.3
+      helm:
+        values: |
+          persistence:
+            storage:
+              storageClassName: local-path
+            originals:
+              nfs:
+                enabled: true
+                server: 192.168.0.120
+                path: /var/lib/rancher/storage/L/Photos
+          ingress:
+            enabled: false
+          resources:
+            limits:
+              memory: 6Gi
+            requests:
+              cpu: 500m
+              memory: 512Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: false
+            runAsUser: 0
+            runAsGroup: 0
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
+          config:
+            PHOTOPRISM_READONLY: true
+            PHOTOPRISM_SITE_URL: https://photos.paas.lsedlar.cz/
+            PHOTOPRISM_SESSION_MAXAGE: "1209600"
+            PHOTOPRISM_WORKERS: "1"
+            PHOTOPRISM_AUTO_INDEX: "86400"
 
   destination:
     server: https://kubernetes.default.svc

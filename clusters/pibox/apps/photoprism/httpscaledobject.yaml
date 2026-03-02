@@ -1,0 +1,19 @@
+---
+kind: HTTPScaledObject
+apiVersion: http.keda.sh/v1alpha1
+metadata:
+  name: photoprism
+  namespace: photoprism
+spec:
+  hosts:
+    - photos.paas.lsedlar.cz
+  scaleTargetRef:
+    name: photoprism-photoprism-plus
+    kind: Deployment
+    apiVersion: apps/v1
+    service: photoprism-photoprism-plus
+    port: 2342
+  replicas:
+    min: 0
+    max: 1
+  scaledownPeriod: 300
