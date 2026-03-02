@@ -8,10 +8,10 @@ spec:
   hosts:
     - photos.paas.lsedlar.cz
   scaleTargetRef:
-    name: photoprism-photoprism-plus
-    kind: Deployment
+    name: photoprism-photoprism
+    kind: StatefulSet
     apiVersion: apps/v1
-    service: photoprism-photoprism-plus
+    service: photoprism-photoprism
     port: 2342
   replicas:
     min: 0

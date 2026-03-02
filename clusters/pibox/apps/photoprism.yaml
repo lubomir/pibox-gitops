@@ -61,7 +61,7 @@ spec:
         - /stringData
         - /data
     - group: apps
-      kind: Deployment
+      kind: StatefulSet
       jsonPointers:
         - /spec/replicas
   syncPolicy:
