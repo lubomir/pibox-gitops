@@ -15,6 +15,7 @@ spec:
       values: |
         providers:
           kubernetesIngress:
+            allowExternalNameServices: true
             publishedService:
               enabled: true
         ports:
