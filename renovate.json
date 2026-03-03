@@ -1,6 +1,13 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended"
-  ]
+    "config:recommended",
+    "docker:pinDigests"
+  ],
+  "argocd": {
+    "fileMatch": ["clusters/.+\\.yaml$"]
+  },
+  "kubernetes": {
+    "fileMatch": ["clusters/.+\\.yaml$"]
+  }
 }
