@@ -9,5 +9,11 @@
   },
   "kubernetes": {
     "fileMatch": ["clusters/.+\\.yaml$"]
-  }
+  },
+  "hostRules": [
+    {
+      "matchHost": "code.forgejo.org",
+      "hostType": "docker"
+    }
+  ]
 }
