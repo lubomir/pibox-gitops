@@ -5,10 +5,14 @@
     "docker:pinDigests"
   ],
   "argocd": {
-    "fileMatch": ["clusters/.+\\.yaml$"]
+    "managerFilePatterns": [
+      "/clusters/.+\\.yaml$/"
+    ]
   },
   "kubernetes": {
-    "fileMatch": ["clusters/.+\\.yaml$"]
+    "managerFilePatterns": [
+      "/clusters/.+\\.yaml$/"
+    ]
   },
   "ignoreDeps": [
     "code.forgejo.org/forgejo/runner"
