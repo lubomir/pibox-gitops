@@ -20,7 +20,11 @@ spec:
               enabled: true
         ports:
           web:
-            redirectTo: websecure
+            http:
+              redirections:
+                entryPoint:
+                  to: websecure
+                  scheme: https
 
   destination:
     server: https://kubernetes.default.svc
