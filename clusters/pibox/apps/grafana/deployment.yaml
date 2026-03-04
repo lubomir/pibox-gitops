@@ -61,7 +61,12 @@ spec:
           volumeMounts:
             - name: grafana-pv
               mountPath: /var/lib/grafana
+            - name: tmp
+              mountPath: /tmp
       volumes:
+        - name: tmp
+          emptyDir:
+            medium: Memory
         - name: grafana-pv
           persistentVolumeClaim:
             claimName: grafana-pvc
