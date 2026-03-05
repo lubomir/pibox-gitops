@@ -5,6 +5,12 @@ metadata:
   name: forgejo
   namespace: argocd
 spec:
+  ignoreDifferences:
+    - group: apps
+      kind: Deployment
+      name: forgejo-runner
+      jsonPointers:
+        - /spec/replicas
   project: default
 
   source:

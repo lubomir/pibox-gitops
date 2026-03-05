@@ -5,7 +5,6 @@ metadata:
   name: forgejo-runner
   namespace: forgejo
 spec:
-  replicas: 1
   selector:
     matchLabels:
       app: forgejo-runner

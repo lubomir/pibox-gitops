@@ -1,0 +1,33 @@
+---
+apiVersion: keda.sh/v1alpha1
+kind: TriggerAuthentication
+metadata:
+  name: forgejo-runner-keda-creds
+  namespace: forgejo
+spec:
+  secretTargetRef:
+    - parameter: token
+      name: forgejo-keda-secret
+      key: token
+---
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: forgejo-runner
+  namespace: forgejo
+spec:
+  scaleTargetRef:
+    name: forgejo-runner
+  pollingInterval: 30
+  cooldownPeriod: 1200
+  minReplicaCount: 0
+  maxReplicaCount: 1
+  triggers:
+    - type: forgejo-runner
+      metadata:
+        name: "k8s-runner-1"
+        address: "http://forgejo-http"
+        global: "true"
+        labels: "docker"
+      authenticationRef:
+        name: forgejo-runner-keda-creds
