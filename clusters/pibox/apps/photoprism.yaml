@@ -14,7 +14,7 @@ spec:
 
     - repoURL: https://charts.photoprism.app/photoprism
       chart: photoprism-plus
-      targetRevision: 1.0.3
+      targetRevision: 1.0.4
       helm:
         values: |
           persistence:
