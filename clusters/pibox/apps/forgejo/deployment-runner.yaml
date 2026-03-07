@@ -30,10 +30,11 @@ spec:
               - sh
               - -c
               - |
-                while ! nc -z localhost 2376 </dev/null; do
-                  echo 'waiting for docker daemon...'
-                  sleep 5
+                while [ ! -f /certs/client/key.pem ]; do
+                  echo 'waiting for docker certs...'
+                  sleep 2
                 done
+                sleep 2
                 cp /secret/RUNNER_CONFIG /data/.runner
                 forgejo-runner -c /config/config.yaml one-job
                 rc=$?
