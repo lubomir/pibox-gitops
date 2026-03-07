@@ -47,7 +47,7 @@ spec:
               forgejo-runner daemon
           env:
             - name: RUNNER_LABEL_IMAGE
-              value: "node:20-bookworm"
+              value: "node:24-bookworm"
             - name: RUNNER_TOKEN
               valueFrom:
                 secretKeyRef:
