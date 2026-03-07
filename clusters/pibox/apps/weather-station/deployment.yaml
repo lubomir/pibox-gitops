@@ -47,6 +47,11 @@ spec:
             secretKeyRef:
               key: authToken
               name: weather-station-secret
+        - name: LOCAL_KEY
+          valueFrom:
+            secretKeyRef:
+              key: localKey
+              name: weather-station-secret
         image: docker.io/lsedlar/weather-station-receiver:latest
         imagePullPolicy: Always
         name: receiver
