@@ -26,7 +26,7 @@ spec:
     - type: forgejo-runner
       metadata:
         name: "k8s-runner-1"
-        address: "http://forgejo-http"
+        address: "http://forgejo-http.forgejo.svc.cluster.local"
         global: "true"
         labels: "docker"
       authenticationRef:
