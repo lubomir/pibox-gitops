@@ -46,7 +46,6 @@ spec:
               # Start the runner
               forgejo-runner daemon
           env:
-            # renovate: datasource=docker depName=node
             - name: RUNNER_LABEL_IMAGE
               value: "node:20-bookworm"
             - name: RUNNER_TOKEN

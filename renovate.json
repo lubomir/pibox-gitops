@@ -16,5 +16,16 @@
   },
   "ignoreDeps": [
     "code.forgejo.org/forgejo/runner"
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": ["deployment-runner\\.yaml$"],
+      "matchStrings": [
+        "RUNNER_LABEL_IMAGE\\n\\s*value:\\s*\"?(?<depName>[^:\"\\s]+):(?<currentValue>[^\"\\s]+)\"?"
+      ],
+      "datasourceTemplate": "docker",
+      "versioningTemplate": "docker"
+    }
   ]
 }
