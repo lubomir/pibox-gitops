@@ -35,7 +35,11 @@ spec:
                   sleep 5
                 done
                 cp /secret/RUNNER_CONFIG /data/.runner
-                exec forgejo-runner -c /config/config.yaml one-job
+                forgejo-runner -c /config/config.yaml one-job
+                rc=$?
+                # Kill dockerd so the pod can terminate
+                pkill -f dockerd || true
+                exit $rc
             env:
               - name: DOCKER_HOST
                 value: tcp://localhost:2376
@@ -67,16 +71,7 @@ spec:
               limits:
                 memory: 1Gi
             command:
-              - sh
-              - -c
-              - |
-                dockerd-entrypoint.sh 2>&1 &
-                while kill -0 7 2>/dev/null; do
-                  sleep 10
-                done
-                sleep 10
-                echo "runner exited, stopping dind"
-                exit 0
+              - dockerd-entrypoint.sh
             env:
               - name: DOCKER_TLS_CERTDIR
                 value: /certs
