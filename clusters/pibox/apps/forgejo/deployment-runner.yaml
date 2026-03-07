@@ -30,18 +30,12 @@ spec:
               - sh
               - -c
               - |
-                while [ ! -f /certs/client/key.pem ]; do
-                  echo 'waiting for docker certs...'
-                  sleep 2
+                while ! nc -z localhost 2376 ; do
+                  echo 'waiting for docker daemon...'
+                  sleep 6
                 done
-                sleep 2
-                ls -lR /certs
                 cp /secret/RUNNER_CONFIG /data/.runner
-                forgejo-runner -c /config/config.yaml one-job
-                rc=$?
-                # Kill dockerd so the pod can terminate
-                pkill -f dockerd || true
-                exit $rc
+                exec forgejo-runner -c /config/config.yaml one-job
             env:
               - name: DOCKER_HOST
                 value: tcp://localhost:2376
@@ -73,7 +67,20 @@ spec:
               limits:
                 memory: 1Gi
             command:
-              - dockerd-entrypoint.sh
+              - sh
+              - -c
+              - |
+                dockerd-entrypoint.sh 2>&1 &
+
+                while pgrep forgejo-runner 2>/dev/null >/dev/null; do
+                    sleep 10
+                    echo "watching main job execution"
+                done
+
+                sleep 10
+
+                echo "main container exited, stopping dind"
+                exit 0
             env:
               - name: DOCKER_TLS_CERTDIR
                 value: /certs
