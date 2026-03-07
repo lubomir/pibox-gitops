@@ -105,7 +105,8 @@ spec:
             persistentVolumeClaim:
               claimName: forgejo-runner-cache
           - name: docker-storage
-            emptyDir: {}
+            persistentVolumeClaim:
+              claimName: forgejo-dind-storage
           - name: docker-certs
             emptyDir: {}
   pollingInterval: 30
