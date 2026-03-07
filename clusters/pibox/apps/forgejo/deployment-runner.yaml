@@ -54,8 +54,6 @@ spec:
                 readOnly: true
               - name: docker-certs
                 mountPath: /certs
-              - name: cache-data
-                mountPath: /data/.cache
           - name: dind
             image: docker:29-dind@sha256:1ba18449911d01f477a3fc104123c85d677addc60701b14b3fcb5381f9c4a537
             securityContext:
@@ -94,16 +92,14 @@ spec:
                 mountPath: /certs
         volumes:
           - name: runner-data
-            emptyDir: {}
+            persistentVolumeClaim:
+              claimName: forgejo-runner-cache
           - name: runner-config
             configMap:
               name: forgejo-runner-config
           - name: runner-secret
             secret:
               secretName: forgejo-runner-secret
-          - name: cache-data
-            persistentVolumeClaim:
-              claimName: forgejo-runner-cache
           - name: docker-storage
             persistentVolumeClaim:
               claimName: forgejo-dind-storage
