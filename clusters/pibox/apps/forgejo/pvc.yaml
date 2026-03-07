@@ -15,7 +15,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: forgejo-runner-data
+  name: forgejo-runner-cache
   namespace: forgejo
 spec:
   accessModes:
@@ -23,4 +23,5 @@ spec:
   storageClassName: local-path
   resources:
     requests:
-      storage: 10Gi
+      storage: 5Gi
+
