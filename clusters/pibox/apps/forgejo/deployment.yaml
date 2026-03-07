@@ -20,7 +20,7 @@ spec:
         fsGroup: 1000
       containers:
         - name: forgejo
-          image: codeberg.org/forgejo/forgejo:14-rootless
+          image: codeberg.org/forgejo/forgejo:14-rootless@sha256:5552c9e25f353760420b8ac7a7f0f0a788ff571bbfd8e2c1e93503d3e2e1b87a
           securityContext:
             runAsNonRoot: true
             runAsUser: 1000
