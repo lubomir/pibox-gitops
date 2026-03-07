@@ -40,12 +40,15 @@ spec:
                   --instance http://forgejo-http \
                   --token "${RUNNER_TOKEN}" \
                   --name "k8s-runner-1" \
-                  --labels "docker:docker://node:20-bookworm"
+                  --labels "docker:docker://${RUNNER_LABEL_IMAGE}"
               fi
 
               # Start the runner
               forgejo-runner daemon
           env:
+            # renovate: datasource=docker depName=node
+            - name: RUNNER_LABEL_IMAGE
+              value: "node:20-bookworm"
             - name: RUNNER_TOKEN
               valueFrom:
                 secretKeyRef:
