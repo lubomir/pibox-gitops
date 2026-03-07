@@ -19,7 +19,7 @@
       {
           "matchDatasources": ["docker"],
           "matchPackageNames": ["code.forgejo.org/forgejo/runner"],
-          "registryUrls": ["https://code.forgejo.org"]
+          "registryUrls": ["https://code.forgejo.org/v2"]
       }
   ]
 }
