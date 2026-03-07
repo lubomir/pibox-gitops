@@ -72,6 +72,9 @@ spec:
               - |
                 dockerd-entrypoint.sh 2>&1 &
 
+                # Give forgejo a moment to start
+                sleep 30
+
                 while pgrep forgejo-runner 2>/dev/null >/dev/null; do
                     sleep 10
                     echo "watching main job execution"
