@@ -14,12 +14,7 @@
       "/clusters/.+\\.yaml$/"
     ]
   },
-  "ignoreDeps": [],
-  "packageRules": [
-      {
-          "matchDatasources": ["docker"],
-          "matchPackageNames": ["code.forgejo.org/forgejo/runner"],
-          "registryUrls": ["https://code.forgejo.org"]
-      }
+  "ignoreDeps": [
+    "code.forgejo.org/forgejo/runner"
   ]
 }
