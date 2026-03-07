@@ -30,11 +30,10 @@ spec:
               - sh
               - -c
               - |
-                while [ ! -f /certs/client/key.pem ]; do
-                  echo 'waiting for docker certs...'
+                while ! wget -q -O /dev/null http://localhost:2375/_ping 2>/dev/null; do
+                  echo 'waiting for docker daemon...'
                   sleep 2
                 done
-                sleep 2
                 cp /secret/RUNNER_CONFIG /data/.runner
                 forgejo-runner -c /config/config.yaml one-job
                 rc=$?
@@ -43,11 +42,7 @@ spec:
                 exit $rc
             env:
               - name: DOCKER_HOST
-                value: tcp://localhost:2376
-              - name: DOCKER_CERT_PATH
-                value: /certs/client
-              - name: DOCKER_TLS_VERIFY
-                value: "1"
+                value: tcp://localhost:2375
             volumeMounts:
               - name: runner-data
                 mountPath: /data
@@ -57,8 +52,6 @@ spec:
               - name: runner-secret
                 mountPath: /secret
                 readOnly: true
-              - name: docker-certs
-                mountPath: /certs
               - name: cache-data
                 mountPath: /data/.cache
           - name: dind
@@ -75,12 +68,10 @@ spec:
               - dockerd-entrypoint.sh
             env:
               - name: DOCKER_TLS_CERTDIR
-                value: /certs
+                value: ""
             volumeMounts:
               - name: docker-storage
                 mountPath: /var/lib/docker
-              - name: docker-certs
-                mountPath: /certs
         volumes:
           - name: runner-data
             emptyDir: {}
@@ -94,8 +85,6 @@ spec:
             persistentVolumeClaim:
               claimName: forgejo-runner-cache
           - name: docker-storage
-            emptyDir: {}
-          - name: docker-certs
             emptyDir: {}
   pollingInterval: 30
   successfulJobsHistoryLimit: 3
