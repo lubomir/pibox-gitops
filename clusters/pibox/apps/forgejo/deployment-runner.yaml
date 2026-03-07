@@ -35,6 +35,7 @@ spec:
                   sleep 2
                 done
                 sleep 2
+                ls -lR /certs
                 cp /secret/RUNNER_CONFIG /data/.runner
                 forgejo-runner -c /config/config.yaml one-job
                 rc=$?
