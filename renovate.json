@@ -18,7 +18,7 @@
   "packageRules": [
       {
           "matchDatasources": ["docker"],
-          "matchPackageNames": ["code.forgejo.org/forgejo/runner"],
+          "matchPackageNames": ["forgejo/runner"],
           "registryUrls": ["https://code.forgejo.org/v2"]
       }
   ]
