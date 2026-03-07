@@ -52,6 +52,11 @@ spec:
             secretKeyRef:
               key: localKey
               name: weather-station-secret
+        - name: DEVICE_IP
+          valueFrom:
+            secretKeyRef:
+              key: deviceIP
+              name: weather-station-secret
         image: docker.io/lsedlar/weather-station-receiver:latest
         imagePullPolicy: Always
         name: receiver
