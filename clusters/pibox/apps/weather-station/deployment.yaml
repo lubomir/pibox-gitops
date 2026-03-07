@@ -52,7 +52,7 @@ spec:
             secretKeyRef:
               key: localKey
               name: weather-station-secret
-        - name: DEVICE_IP
+        - name: TUYA_DEVICE_IP
           valueFrom:
             secretKeyRef:
               key: deviceIP
