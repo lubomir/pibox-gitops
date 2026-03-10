@@ -13,6 +13,10 @@ data:
     scheme = "http"
     proxy_mode = true
 
+    [cluster]
+    secret_raft = "placeholder_not_used_with_postgres"
+    secret_api = "placeholder_not_used_with_postgres"
+
     [database]
     hiqlite = false
 
