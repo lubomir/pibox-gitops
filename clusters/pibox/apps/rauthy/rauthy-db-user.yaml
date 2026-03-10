@@ -1,0 +1,17 @@
+---
+apiVersion: db.movetokube.com/v1alpha1
+kind: PostgresUser
+metadata:
+  name: rauthy-db-user
+  namespace: rauthy
+spec:
+  role: rauthy
+  database: rauthy-db
+  secretName: rauthy-postgres
+  privileges: OWNER
+  secretTemplate:
+    PG_HOST: "postgresql.postgresql.svc.cluster.local"
+    PG_PORT: "5432"
+    PG_DB_NAME: "rauthy"
+    PG_USER: "{{.Role}}"
+    PG_PASSWORD: "{{.Password}}"

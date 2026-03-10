@@ -1,0 +1,98 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rauthy
+  namespace: rauthy
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: rauthy
+  template:
+    metadata:
+      labels:
+        app: rauthy
+    spec:
+      containers:
+        - name: rauthy
+          image: ghcr.io/sebadob/rauthy:0.33.4
+          resources:
+            requests:
+              cpu: 10m
+              memory: 64Mi
+            limits:
+              memory: 128Mi
+          ports:
+            - containerPort: 8080
+              name: http
+          env:
+            - name: HIQLITE
+              value: "false"
+            - name: PG_HOST
+              valueFrom:
+                secretKeyRef:
+                  key: PG_HOST
+                  name: rauthy-postgres-rauthy-db-user
+            - name: PG_PORT
+              valueFrom:
+                secretKeyRef:
+                  key: PG_PORT
+                  name: rauthy-postgres-rauthy-db-user
+            - name: PG_DB_NAME
+              valueFrom:
+                secretKeyRef:
+                  key: PG_DB_NAME
+                  name: rauthy-postgres-rauthy-db-user
+            - name: PG_USER
+              valueFrom:
+                secretKeyRef:
+                  key: PG_USER
+                  name: rauthy-postgres-rauthy-db-user
+            - name: PG_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: PG_PASSWORD
+                  name: rauthy-postgres-rauthy-db-user
+            - name: PUB_URL
+              value: "sso.paas.lsedlar.cz"
+            - name: LISTEN_SCHEME
+              value: "http"
+            - name: LISTEN_PORT_HTTP
+              value: "8080"
+            - name: PROXY_MODE
+              value: "true"
+            - name: RP_ID
+              value: "sso.paas.lsedlar.cz"
+            - name: RP_ORIGIN
+              value: "https://sso.paas.lsedlar.cz:443"
+            - name: RP_NAME
+              value: "Rauthy IAM"
+            - name: ENC_KEYS
+              valueFrom:
+                secretKeyRef:
+                  key: ENC_KEYS
+                  name: rauthy-secrets
+            - name: ENC_KEY_ACTIVE
+              valueFrom:
+                secretKeyRef:
+                  key: ENC_KEY_ACTIVE
+                  name: rauthy-secrets
+          livenessProbe:
+            httpGet:
+              path: /auth/v1/health
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            failureThreshold: 3
+            timeoutSeconds: 3
+          readinessProbe:
+            httpGet:
+              path: /auth/v1/health
+              port: 8080
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            failureThreshold: 3
+            timeoutSeconds: 3
