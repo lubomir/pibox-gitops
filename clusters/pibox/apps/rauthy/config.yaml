@@ -15,6 +15,7 @@ data:
     trusted_proxies = ["172.30.0.0/24"]
 
     [cluster]
+    node_id = 1
     secret_raft = "placeholder_not_used_with_postgres"
     secret_api = "placeholder_not_used_with_postgres"
 
