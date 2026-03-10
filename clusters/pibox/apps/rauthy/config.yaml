@@ -1,0 +1,22 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rauthy-config
+  namespace: rauthy
+data:
+  config.toml: |
+    [server]
+    pub_url = "sso.paas.lsedlar.cz"
+    listen_address = "0.0.0.0"
+    port_http = 8080
+    scheme = "http"
+    proxy_mode = true
+
+    [database]
+    hiqlite = false
+
+    [webauthn]
+    rp_id = "sso.paas.lsedlar.cz"
+    rp_origin = "https://sso.paas.lsedlar.cz:443"
+    rp_name = "Rauthy IAM"

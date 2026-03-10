@@ -16,9 +16,16 @@ spec:
       labels:
         app: rauthy
     spec:
+      securityContext:
+        fsGroup: 10001
       containers:
         - name: rauthy
           image: ghcr.io/sebadob/rauthy:0.33.4
+          securityContext:
+            runAsUser: 10001
+            runAsGroup: 10001
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
           resources:
             requests:
               cpu: 10m
@@ -29,8 +36,6 @@ spec:
             - containerPort: 8080
               name: http
           env:
-            - name: HIQLITE
-              value: "false"
             - name: PG_HOST
               valueFrom:
                 secretKeyRef:
@@ -56,20 +61,6 @@ spec:
                 secretKeyRef:
                   key: PG_PASSWORD
                   name: rauthy-postgres-rauthy-db-user
-            - name: PUB_URL
-              value: "sso.paas.lsedlar.cz"
-            - name: LISTEN_SCHEME
-              value: "http"
-            - name: LISTEN_PORT_HTTP
-              value: "8080"
-            - name: PROXY_MODE
-              value: "true"
-            - name: RP_ID
-              value: "sso.paas.lsedlar.cz"
-            - name: RP_ORIGIN
-              value: "https://sso.paas.lsedlar.cz:443"
-            - name: RP_NAME
-              value: "Rauthy IAM"
             - name: ENC_KEYS
               valueFrom:
                 secretKeyRef:
@@ -84,10 +75,9 @@ spec:
             httpGet:
               path: /auth/v1/health
               port: 8080
-            initialDelaySeconds: 30
-            periodSeconds: 10
-            failureThreshold: 3
-            timeoutSeconds: 3
+            initialDelaySeconds: 60
+            periodSeconds: 30
+            failureThreshold: 2
           readinessProbe:
             httpGet:
               path: /auth/v1/health
@@ -96,3 +86,12 @@ spec:
             periodSeconds: 10
             failureThreshold: 3
             timeoutSeconds: 3
+          volumeMounts:
+            - name: rauthy-config
+              mountPath: /app/config.toml
+              readOnly: true
+              subPath: config.toml
+      volumes:
+        - name: rauthy-config
+          configMap:
+            name: rauthy-config
