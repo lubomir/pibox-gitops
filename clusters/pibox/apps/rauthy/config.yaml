@@ -12,6 +12,7 @@ data:
     port_http = 8080
     scheme = "http"
     proxy_mode = true
+    trusted_proxies = ["172.30.0.0/24"]
 
     [cluster]
     secret_raft = "placeholder_not_used_with_postgres"
