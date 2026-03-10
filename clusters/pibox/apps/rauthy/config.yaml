@@ -13,6 +13,7 @@ data:
     scheme = "http"
     proxy_mode = true
     trusted_proxies = ["172.30.0.0/24"]
+    peer_ip_header_name = "X-Forwarded-For"
 
     [cluster]
     node_id = 1
