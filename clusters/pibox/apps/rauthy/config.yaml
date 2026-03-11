@@ -22,6 +22,9 @@ data:
     [database]
     hiqlite = false
 
+    [email]
+    smtp_url = "smtp.gmail.com"
+
     [webauthn]
     rp_id = "sso.paas.lsedlar.cz"
     rp_origin = "https://sso.paas.lsedlar.cz:443"

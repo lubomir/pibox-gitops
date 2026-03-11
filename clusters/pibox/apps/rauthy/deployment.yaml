@@ -61,6 +61,16 @@ spec:
                 secretKeyRef:
                   key: PG_PASSWORD
                   name: rauthy-postgres-rauthy-db-user
+            - name: SMTP_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  key: SMTP_USERNAME
+                  name: rauthy-secrets
+            - name: SMTP_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  key: SMTP_PASSWORD
+                  name: rauthy-secrets
             - name: ENC_KEYS
               valueFrom:
                 secretKeyRef:
