@@ -25,6 +25,15 @@ spec:
                 entryPoint:
                   to: websecure
                   scheme: https
+          websecure:
+            proxyProtocol:
+              trustedIPs:
+                - 127.0.0.1/8
+                - 172.30.0.0/24
+            forwardedHeaders:
+              trustedIPs:
+                - 127.0.0.1/8
+                - 172.30.0.0/24
 
   destination:
     server: https://kubernetes.default.svc
