@@ -46,17 +46,21 @@ sqlite3 "$K3S_DB" ".backup '$BACKUP_WORK_DIR/k3s-state.db'"
 cp -a "$K3S_SERVER_DIR/tls" "$BACKUP_WORK_DIR/k3s-tls"
 cp "$K3S_SERVER_DIR/token" "$BACKUP_WORK_DIR/k3s-token"
 
-# --- 2. PostgreSQL dump ---
-log "Dumping PostgreSQL databases"
-POSTGRES_POD=$(kubectl get pods -n postgresql -l app.kubernetes.io/name=postgresql -o jsonpath='{.items[0].metadata.name}')
-PGPASSWORD=$(kubectl get secret -n postgresql postgresql-secret -o jsonpath='{.data.postgres-password}' | base64 -d)
-kubectl exec -n postgresql "$POSTGRES_POD" -- bash -c "PGPASSWORD='$PGPASSWORD' pg_dumpall -U postgres | gzip > /tmp/pg_dumpall.sql.gz"
-kubectl cp -n postgresql "$POSTGRES_POD:/tmp/pg_dumpall.sql.gz" "$BACKUP_WORK_DIR/pg_dumpall.sql.gz"
-kubectl exec -n postgresql "$POSTGRES_POD" -- rm /tmp/pg_dumpall.sql.gz
+if systemctl is-active --quiet k3s; then
+    # --- 2. PostgreSQL dump ---
+    log "Dumping PostgreSQL databases"
+    POSTGRES_POD=$(kubectl get pods -n postgresql -l app.kubernetes.io/name=postgresql -o jsonpath='{.items[0].metadata.name}')
+    PGPASSWORD=$(kubectl get secret -n postgresql postgresql-secret -o jsonpath='{.data.postgres-password}' | base64 -d)
+    kubectl exec -n postgresql "$POSTGRES_POD" -- bash -c "PGPASSWORD='$PGPASSWORD' pg_dumpall -U postgres | gzip > /tmp/pg_dumpall.sql.gz"
+    kubectl cp -n postgresql "$POSTGRES_POD:/tmp/pg_dumpall.sql.gz" "$BACKUP_WORK_DIR/pg_dumpall.sql.gz"
+    kubectl exec -n postgresql "$POSTGRES_POD" -- rm /tmp/pg_dumpall.sql.gz
 
-# --- 3. Sealed Secrets signing key ---
-log "Backing up Sealed Secrets keys"
-kubectl get secret -n kube-system -l sealedsecrets.bitnami.com/sealed-secrets-key -o yaml > "$BACKUP_WORK_DIR/sealed-secrets-keys.yaml"
+    # --- 3. Sealed Secrets signing key ---
+    log "Backing up Sealed Secrets keys"
+    kubectl get secret -n kube-system -l sealedsecrets.bitnami.com/sealed-secrets-key -o yaml > "$BACKUP_WORK_DIR/sealed-secrets-keys.yaml"
+else
+    log "k3s is not running, skipping PostgreSQL dump and Sealed Secrets backup"
+fi
 
 # --- 4. Restic backup ---
 log "Running restic backup"
