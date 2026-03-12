@@ -50,7 +50,9 @@ cp "$K3S_SERVER_DIR/token" "$BACKUP_WORK_DIR/k3s-token"
 log "Dumping PostgreSQL databases"
 POSTGRES_POD=$(kubectl get pods -n postgresql -l app.kubernetes.io/name=postgresql -o jsonpath='{.items[0].metadata.name}')
 PGPASSWORD=$(kubectl get secret -n postgresql postgresql-secret -o jsonpath='{.data.postgres-password}' | base64 -d)
-kubectl exec -n postgresql "$POSTGRES_POD" -- bash -c "PGPASSWORD='$PGPASSWORD' pg_dumpall -U postgres" | gzip > "$BACKUP_WORK_DIR/pg_dumpall.sql.gz"
+kubectl exec -n postgresql "$POSTGRES_POD" -- bash -c "PGPASSWORD='$PGPASSWORD' pg_dumpall -U postgres | gzip > /tmp/pg_dumpall.sql.gz"
+kubectl cp -n postgresql "$POSTGRES_POD:/tmp/pg_dumpall.sql.gz" "$BACKUP_WORK_DIR/pg_dumpall.sql.gz"
+kubectl exec -n postgresql "$POSTGRES_POD" -- rm /tmp/pg_dumpall.sql.gz
 
 # --- 3. Sealed Secrets signing key ---
 log "Backing up Sealed Secrets keys"
