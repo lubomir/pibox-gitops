@@ -2,6 +2,7 @@
 Description=Pibox backup to Hetzner StorageBox
 Wants=network-online.target
 After=network-online.target
+OnFailure=pibox-backup-failure-notify@%n.service
 
 [Service]
 Type=oneshot

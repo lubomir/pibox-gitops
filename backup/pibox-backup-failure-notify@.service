@@ -1,0 +1,6 @@
+[Unit]
+Description=Send notification about %i failure
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c 'echo -e "Subject: %i failed on $(hostname)\n\n%i failed at $(date).\n\nJournal output:\n$(journalctl -u %i --since=-1h --no-pager)" | ssmtp root'

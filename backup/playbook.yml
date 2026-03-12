@@ -175,6 +175,14 @@
         mode: "0644"
       notify: Reload systemd
 
+    - name: Install failure notification service
+      ansible.builtin.copy:
+        src: pibox-backup-failure-notify@.service
+        dest: /etc/systemd/system/pibox-backup-failure-notify@.service
+        owner: root
+        mode: "0644"
+      notify: Reload systemd
+
     - name: Install systemd timer
       ansible.builtin.copy:
         src: pibox-backup.timer
