@@ -26,7 +26,7 @@ data:
         - "docker:docker://node:24-bookworm"
     cache:
       enabled: true
-      dir: ""
+      dir: /data/cache
       host: ""
       port: 0
       proxy_port: 0
