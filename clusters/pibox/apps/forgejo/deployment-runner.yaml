@@ -35,8 +35,7 @@ spec:
                   sleep 6
                 done
                 cp /secret/RUNNER_CONFIG /data/.runner
-                sed "s/REPLACE_WITH_CACHE_SECRET/$CACHE_SECRET/" /config/config.yaml > /data/config.yaml
-                exec forgejo-runner -c /data/config.yaml one-job
+                exec forgejo-runner -c /config/config.yaml one-job
             env:
               - name: DOCKER_HOST
                 value: tcp://localhost:2376
@@ -44,11 +43,6 @@ spec:
                 value: /certs/client
               - name: DOCKER_TLS_VERIFY
                 value: "1"
-              - name: CACHE_SECRET
-                valueFrom:
-                  secretKeyRef:
-                    name: forgejo-runner-secret
-                    key: CACHE_SECRET
             volumeMounts:
               - name: runner-data
                 mountPath: /data
@@ -98,7 +92,8 @@ spec:
                 mountPath: /certs
         volumes:
           - name: runner-data
-            emptyDir: {}
+            persistentVolumeClaim:
+              claimName: forgejo-runner-cache
           - name: runner-config
             configMap:
               name: forgejo-runner-config

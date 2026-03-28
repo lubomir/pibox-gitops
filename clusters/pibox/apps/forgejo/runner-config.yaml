@@ -26,12 +26,12 @@ data:
         - "docker:docker://node:24-bookworm"
     cache:
       enabled: true
-      dir: ""
+      dir: /data/cache
       host: ""
       port: 0
       proxy_port: 0
-      external_server: "http://forgejo-runner-cache.forgejo.svc.cluster.local:8080/"
-      secret: REPLACE_WITH_CACHE_SECRET
+      external_server: ""
+      secret: ""
       actions_cache_url_override: ""
     container:
       network: ""
