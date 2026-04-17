@@ -55,7 +55,7 @@ spec:
               - name: docker-certs
                 mountPath: /certs
           - name: dind
-            image: docker:29-dind@sha256:4d90f1f6c400315c2dba96d3ec93c01e64198395cbba04f79d12adce4f737029
+            image: docker:29-dind@sha256:a6dd5322747a95cd8e3207bd8d415a8fd20ec34e9c00f06dc019cbd912013489
             securityContext:
               privileged: true
             resources:
