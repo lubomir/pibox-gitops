@@ -20,7 +20,7 @@ spec:
         fsGroup: 10001
       containers:
         - name: rauthy
-          image: ghcr.io/sebadob/rauthy:0.34.3@sha256:a4ab7ad09f8f1795783ef7e71c7d937561d51849c919c620d54ca8ff2f25ad05
+          image: ghcr.io/sebadob/rauthy:0.35.1@sha256:a8637f70bae57fd9a334dcdc92765e1fb56f8a4f2e043926695e7b3530ffa729
           securityContext:
             runAsUser: 10001
             runAsGroup: 10001
