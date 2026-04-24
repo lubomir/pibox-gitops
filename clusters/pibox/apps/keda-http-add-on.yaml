@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: https://kedacore.github.io/charts
     chart: keda-add-ons-http
-    targetRevision: 0.13.0
+    targetRevision: 0.14.0
     helm:
       values: |
         interceptor:
