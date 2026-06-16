@@ -14,7 +14,7 @@ spec:
 
     - repoURL: https://charts.bitnami.com/bitnami
       chart: postgresql
-      targetRevision: 18.7.3
+      targetRevision: 18.7.5
       helm:
         values: |
           auth:
