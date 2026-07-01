@@ -14,7 +14,7 @@ spec:
 
     - repoURL: ghcr.io/renovatebot/charts
       chart: renovate
-      targetRevision: 46.154.0
+      targetRevision: 46.214.5
       helm:
         values: |
           cronjob:
