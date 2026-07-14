@@ -18,6 +18,19 @@ spec:
     spec:
       securityContext:
         fsGroup: 1000
+      initContainers:
+      - name: wait-for-postgres
+        image: postgres:18-alpine
+        command:
+        - sh
+        - -c
+        - until psql "$DATABASE_URL" -c 'SELECT 1' > /dev/null 2>&1; do echo waiting for database; sleep 2; done;
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              key: databaseUrl
+              name: weather-station-postgres-weather-station-db-user
       containers:
       - env:
         - name: TARGET_DIR
