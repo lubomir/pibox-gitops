@@ -20,7 +20,7 @@ spec:
         fsGroup: 1000
       initContainers:
       - name: wait-for-postgres
-        image: postgres:18-alpine
+        image: postgres:18-alpine@sha256:9a8afca54e7861fd90fab5fdf4c42477a6b1cb7d293595148e674e0a3181de15
         command:
         - sh
         - -c
