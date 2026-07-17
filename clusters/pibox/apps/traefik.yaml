@@ -13,6 +13,8 @@ spec:
     targetRevision: 41.0.2
     helm:
       values: |
+        service:
+          clusterIP: "172.31.108.208"
         providers:
           kubernetesIngress:
             allowExternalNameServices: true
