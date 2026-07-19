@@ -15,11 +15,6 @@ spec:
         labels:
           app: forgejo-runner
       spec:
-        hostAliases:
-          - ip: "172.31.108.208"
-            # The ip above must match `kubectl get svc my-traefik -n traefik -o jsonpath='{.spec.clusterIP}'`
-            hostnames:
-              - "git.paas.lsedlar.cz"
         restartPolicy: Never
         shareProcessNamespace: true
         containers:
