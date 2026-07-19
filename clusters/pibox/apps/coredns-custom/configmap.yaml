@@ -6,8 +6,9 @@ metadata:
   namespace: kube-system
 data:
   custom.server: |
-    template IN A paas.lsedlar.cz {
-        match ".*\.paas\.lsedlar\.cz\.$"
-        answer "{{ .Name }} 60 IN A 192.168.0.120"
-        fallthrough
+    paas.lsedlar.cz:53 {
+        hosts {
+            192.168.0.120 git.paas.lsedlar.cz grafana.paas.lsedlar.cz sso.paas.lsedlar.cz photos.paas.lsedlar.cz ww.paas.lsedlar.cz
+            fallthrough
+        }
     }
