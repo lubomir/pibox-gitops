@@ -1,0 +1,16 @@
+name: Validate coredns-custom
+
+on:
+  push:
+    paths:
+      - '**.yaml'
+  pull_request:
+    paths:
+      - '**.yaml'
+
+jobs:
+  validate-coredns:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: ./validate-coredns.sh
