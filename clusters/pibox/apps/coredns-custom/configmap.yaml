@@ -5,10 +5,9 @@ metadata:
   name: coredns-custom
   namespace: kube-system
 data:
-  custom.server: |
-    paas.lsedlar.cz:53 {
-        hosts {
-            192.168.0.120 git.paas.lsedlar.cz grafana.paas.lsedlar.cz sso.paas.lsedlar.cz photos.paas.lsedlar.cz ww.paas.lsedlar.cz
-            fallthrough
-        }
-    }
+  local-hairpin.override: |
+    rewrite name exact git.paas.lsedlar.cz my-traefik.traefik.svc.cluster.local
+    rewrite name exact grafana.paas.lsedlar.cz my-traefik.traefik.svc.cluster.local
+    rewrite name exact sso.paas.lsedlar.cz my-traefik.traefik.svc.cluster.local
+    rewrite name exact photos.paas.lsedlar.cz my-traefik.traefik.svc.cluster.local
+    rewrite name exact ww.paas.lsedlar.cz my-traefik.traefik.svc.cluster.local
