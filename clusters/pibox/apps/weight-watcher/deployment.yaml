@@ -2,8 +2,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    ignore-check.kube-linter.io/latest-tag: "only latest tag is published"
   name: weight-watcher
   namespace: weight-watcher
 spec:
@@ -28,7 +26,7 @@ spec:
             secretKeyRef:
               key: authToken
               name: weight-watcher-secret
-        image: docker.io/lsedlar/weight-watcher-rs:latest@sha256:6fa96115a18bab922ae71e2386e051697f6d0c4e67be4fdf45d1307a0c07436f
+        image: docker.io/lsedlar/weight-watcher-rs:0.1.1@sha256:a89598f7631cebf048cada555f01b96ae7d31a01d3e6db30fb0a7aea88438a0a
         imagePullPolicy: Always
         name: weight-watcher
         securityContext:
