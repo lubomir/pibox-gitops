@@ -24,7 +24,8 @@
         "docker://(?<depName>[^:\"\\s]+):(?<currentValue>[^\"\\s@]+)(@(?<currentDigest>sha256:[a-f0-9]+))?"
       ],
       "datasourceTemplate": "docker",
-      "versioningTemplate": "docker"
+      "versioningTemplate": "docker",
+      "autoReplaceStringTemplate": "docker://{{depName}}:{{newValue}}{{#newDigest}}@{{newDigest}}{{/newDigest}}"
     }
   ]
 }
