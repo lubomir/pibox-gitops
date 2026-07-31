@@ -25,7 +25,7 @@
       ],
       "datasourceTemplate": "docker",
       "versioningTemplate": "docker",
-      "autoReplaceStringTemplate": "docker://{{depName}}:{{newValue}}{{#newDigest}}@{{newDigest}}{{/newDigest}}"
+      "autoReplaceStringTemplate": "TEST-{{new_digest}}"
     }
   ]
 }
