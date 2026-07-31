@@ -14,9 +14,6 @@
       "/clusters/.+\\.yaml$/"
     ]
   },
-  "ignoreDeps": [
-    "code.forgejo.org/forgejo/runner"
-  ],
   "customManagers": [
     {
       "customType": "regex",
