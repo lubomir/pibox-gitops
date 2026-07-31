@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: https://kedacore.github.io/charts
     chart: keda
-    targetRevision: 2.20.1
+    targetRevision: 2.20.2
 
   destination:
     server: https://kubernetes.default.svc
