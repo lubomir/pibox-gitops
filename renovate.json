@@ -21,7 +21,7 @@
         "/runner-config\\.yaml$/"
       ],
       "matchStrings": [
-        "docker://(?<depName>[^:\"\\s]+):(?<currentValue>[^\"\\s]+)(@(?<currentDigest>sha256:[a-f0-9]+))?"
+        "docker://(?<depName>[^:\"\\s]+):(?<currentValue>[^\"\\s@]+)(@(?<currentDigest>sha256:[a-f0-9]+))?"
       ],
       "datasourceTemplate": "docker",
       "versioningTemplate": "docker"
