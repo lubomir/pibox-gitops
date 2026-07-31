@@ -23,7 +23,7 @@ data:
       fetch_interval: 2s
       report_interval: 1s
       labels:
-        - "docker:docker://node:24-bookworm"
+        - "docker:docker://node:24.18.1-bookworm"
     cache:
       enabled: true
       dir: /data/cache
