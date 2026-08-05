@@ -4,7 +4,14 @@ useDefault = true
 # This makes the pattern not match on a SealedSecret
 [[rules]]
 id = "generic-api-key"
-[[allowlists]]
+[[rules.allowlists]]
 condition = "AND"
 regexes = ['''^Ag[a-zA-Z0-9+/]{500,}={0,2}''']
 paths = ['''(?i).*\.ya?ml$''']
+
+# Ensure docker:// urls for Forgejo runner doesn't alert
+[[allowlists]]
+description = "Global allowlist"
+regexes = [
+    "docker://",
+]
