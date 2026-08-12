@@ -89,7 +89,7 @@ spec:
         livenessProbe:
           failureThreshold: 3
           httpGet:
-            path: /status-check
+            path: /status-check?type=live
             port: 8000
             scheme: HTTP
           initialDelaySeconds: 10
@@ -98,7 +98,7 @@ spec:
         readinessProbe:
           failureThreshold: 3
           httpGet:
-            path: /status-check
+            path: /status-check?type=ready
             port: 8000
             scheme: HTTP
           initialDelaySeconds: 10
