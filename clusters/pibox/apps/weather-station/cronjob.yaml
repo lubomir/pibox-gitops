@@ -2,8 +2,6 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  annotations:
-    ignore-check.kube-linter.io/latest-tag: "only latest tag is published"
   name: weather-downsample
   namespace: weather-station
 spec:
@@ -19,7 +17,7 @@ spec:
             fsGroup: 1000
           containers:
           - name: downsample
-            image: docker.io/lsedlar/weather-station-receiver:latest@sha256:10c01caba8a6e53c031b3ed465f85e103950621917cea8036040bfff34ef7f17
+            image: docker.io/lsedlar/weather-station-receiver:1.0.0@sha256:3ee3285a080e5ae24126e83e5f05d12c3407ddf7506ec5ce0162841101024f3d
             imagePullPolicy: IfNotPresent
             securityContext:
               runAsNonRoot: true
