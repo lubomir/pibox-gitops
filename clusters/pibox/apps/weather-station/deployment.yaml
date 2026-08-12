@@ -32,6 +32,11 @@ spec:
         securityContext:
           runAsNonRoot: true
           readOnlyRootFilesystem: true
+        resources:
+          requests:
+            cpu: 10m
+          limits:
+            memory: 64Mi
       containers:
       - env:
         - name: TARGET_DIR
