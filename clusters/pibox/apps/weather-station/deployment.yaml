@@ -108,7 +108,6 @@ spec:
         volumeMounts:
         - mountPath: /storage
           name: storage
-      restartPolicy: Always
       terminationGracePeriodSeconds: 30
       volumes:
       - name: storage
