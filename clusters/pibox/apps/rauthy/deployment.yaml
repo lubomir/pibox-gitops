@@ -35,6 +35,8 @@ spec:
           ports:
             - containerPort: 8080
               name: http
+            - containerPort: 8200
+              name: ready
           env:
             - name: PG_HOST
               valueFrom:
