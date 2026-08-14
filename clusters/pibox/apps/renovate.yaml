@@ -29,6 +29,8 @@ spec:
           env:
             RENOVATE_GIT_AUTHOR: 'Renovate Bot <noreply@lsedlar.cz>'
             RENOVATE_ALLOWED_COMMANDS: '^\./bump-version\.sh$'
+            RENOVATE_DETECT_HOST_RULES_FROM_ENV: 'true'
+            RENOVATE_DOCKER_DOCKER_IO_USERNAME: 'lsedlar'
           envFrom:
             - secretRef:
                 name: renovate-secret
