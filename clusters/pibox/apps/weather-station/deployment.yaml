@@ -30,8 +30,9 @@ spec:
               key: databaseUrl
               name: weather-station-postgres-weather-station-db-user
         securityContext:
-          runAsNonRoot: true
           readOnlyRootFilesystem: true
+          runAsNonRoot: true
+          runAsUser: 70
         resources:
           requests:
             cpu: 10m
