@@ -99,11 +99,16 @@ spec:
             periodSeconds: 3
             failureThreshold: 2
           volumeMounts:
+            - name: rauthy-data
+              mountPath: /app/data
             - name: rauthy-config
               mountPath: /app/config.toml
               readOnly: true
               subPath: config.toml
       volumes:
+        - name: rauthy-data
+          persistentVolumeClaim:
+            claimName: rauthy-data
         - name: rauthy-config
           configMap:
             name: rauthy-config
