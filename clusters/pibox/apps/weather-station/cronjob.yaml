@@ -30,7 +30,7 @@ spec:
               limits:
                 memory: 256Mi
             command:
-            - python
+            - /app/.venv/bin/python
             - /app/downsampler.py
             env:
             - name: DATABASE_URL
