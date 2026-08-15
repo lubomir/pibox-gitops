@@ -1,0 +1,40 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: argocd-notifications-cm
+  namespace: argocd
+  labels:
+    app.kubernetes.io/component: notifications-controller
+    app.kubernetes.io/name: argocd-notifications-controller
+    app.kubernetes.io/part-of: argocd
+data:
+  service.email: |
+    host: smtp.gmail.com
+    port: 587
+    from: ArgoCD <lubomir.sedlar+argocd@gmail.com>
+    username: $email-username
+    password: $email-password
+  trigger.on-sync-failed: |
+    - description: Application syncing has failed
+      send:
+        - email:
+            to: '{{.recipient}}'
+      when: app.status.operationState.phase in ['Error', 'Failed'] and app.status.operationState.operation.sync is not None
+    - description: Application sync was terminated
+      send:
+        - email:
+            to: '{{.recipient}}'
+      when: app.status.operationState.phase in ['Terminating'] and app.status.operationState.operation.sync is not None
+  trigger.on-health-degraded: |
+    - description: Application has degraded
+      send:
+        - email:
+            to: '{{.recipient}}'
+      when: app.status.health.status == 'Degraded'
+  subscriptions: |
+    - recipients:
+        - email:lubomir.sedlar@gmail.com
+      triggers:
+        - on-sync-failed
+        - on-health-degraded
