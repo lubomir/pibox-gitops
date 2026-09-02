@@ -18,7 +18,7 @@ spec:
       helm:
         values: |
           cronjob:
-            schedule: '0 */4 * * *'
+            schedule: '*/10 * * * *'
           renovate:
             persistence:
               cache:
