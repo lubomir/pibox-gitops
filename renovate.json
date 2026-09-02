@@ -27,5 +27,13 @@
       "versioningTemplate": "docker",
       "autoReplaceStringTemplate": "docker://{{{depName}}}:{{{newValue}}}@{{{newDigest}}}"
     }
+  ],
+  "packageRules": [
+    {
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["/^docker\\.io/lsedlar//"],
+      "matchUpdateTypes": ["minor", "patch", "digest"],
+      "automerge": true
+    }
   ]
 }
