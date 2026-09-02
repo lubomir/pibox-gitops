@@ -20,6 +20,11 @@ spec:
           cronjob:
             schedule: '0 */4 * * *'
           renovate:
+            persistence:
+              cache:
+                enabled: true
+                storageClass: local-path
+                storageSize: 1Gi
             config: |
               {
                 "platform": "forgejo",
@@ -27,6 +32,7 @@ spec:
                 "autodiscover": true
               }
           env:
+            RENOVATE_X_SQLITE_PACKAGE_CACHE: 'true'
             RENOVATE_GIT_AUTHOR: 'Renovate Bot <noreply@lsedlar.cz>'
             RENOVATE_ALLOWED_COMMANDS: '^\./bump-version\.sh$'
             RENOVATE_DETECT_HOST_RULES_FROM_ENV: 'true'
