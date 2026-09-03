@@ -26,6 +26,17 @@
       "datasourceTemplate": "docker",
       "versioningTemplate": "docker",
       "autoReplaceStringTemplate": "docker://{{{depName}}}:{{{newValue}}}@{{{newDigest}}}"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/traefik\\.yaml$/"
+      ],
+      "matchStrings": [
+        "moduleName:\\s*(?<depName>github\\.com/[\\w-]+/[\\w-]+)\\s*\\n\\s*version:\\s*(?<currentValue>v[\\d.]+)"
+      ],
+      "datasourceTemplate": "github-tags",
+      "versioningTemplate": "semver"
     }
   ],
   "packageRules": [
