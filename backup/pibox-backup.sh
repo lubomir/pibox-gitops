@@ -64,11 +64,36 @@ fi
 
 # --- 4. Restic backup ---
 log "Running restic backup"
+
+RESTIC_EXCLUDE_ARGS=(
+    --exclude='*.sock'
+    --exclude='lost+found'
+)
+
+# Exclude PVCs that don't need backing up (e.g. docker:dind build cache).
+# Resolved dynamically via kubectl when k3s is running.
+EXCLUDE_PVC_NAMES=(
+    "forgejo-dind-storage"
+)
+
+if systemctl is-active --quiet k3s; then
+    for pvc_name in "${EXCLUDE_PVC_NAMES[@]}"; do
+        pv_name=$(kubectl get pv -o jsonpath="{.items[?(@.spec.claimRef.name==\"${pvc_name}\")].metadata.name}" 2>/dev/null || true)
+        if [ -n "$pv_name" ]; then
+            log "Excluding PVC $pvc_name ($pv_name) from backup"
+            RESTIC_EXCLUDE_ARGS+=(--exclude="$LOCAL_PATH_BASE/$pv_name")
+        else
+            log "WARNING: Could not resolve PV for PVC $pvc_name, backing it up"
+        fi
+    done
+else
+    log "k3s not running, skipping PVC exclusion (all PVCs will be backed up)"
+fi
+
 restic backup \
     --verbose \
     --tag pibox \
-    --exclude='*.sock' \
-    --exclude='lost+found' \
+    "${RESTIC_EXCLUDE_ARGS[@]}" \
     "$BACKUP_WORK_DIR" \
     "$LOCAL_PATH_BASE" \
     "$SMB_STORAGE"
