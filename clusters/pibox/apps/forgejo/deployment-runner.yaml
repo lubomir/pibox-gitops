@@ -68,7 +68,7 @@ spec:
               - sh
               - -c
               - |
-                START_TIME="$(date --iso-8601=seconds)"
+                START_TIME="$(date -Iseconds)"
 
                 dockerd-entrypoint.sh 2>&1 &
 

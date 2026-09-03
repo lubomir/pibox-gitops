@@ -32,7 +32,7 @@ data:
 
     docker events \
         --since "$since" \
-        --until "$(date --iso-8601=seconds)" \
+        --until "$(date -Iseconds)" \
         --filter type=container \
         --filter event=start \
         --format '{{.Actor.Attributes.image}}' |
