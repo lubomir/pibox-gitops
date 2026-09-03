@@ -27,11 +27,6 @@ spec:
               allowExternalNameServices: true
               publishedService:
                 enabled: true
-          entryPoints:
-            websecure:
-              http:
-                middlewares:
-                  - traefik-global-fail2ban@kubernetescrd
           ports:
             web:
               proxyProtocol:
@@ -56,6 +51,9 @@ spec:
                 trustedIPs:
                   - 127.0.0.1/8
                   - 172.30.0.0/24
+              http:
+                middlewares:
+                  - traefik-global-fail2ban@kubernetescrd
 
   destination:
     server: https://kubernetes.default.svc
