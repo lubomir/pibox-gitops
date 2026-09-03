@@ -7,6 +7,11 @@ metadata:
 spec:
   plugin:
     fail2ban:
+      allowlist:
+        ip:
+          - 10.0.0.0/8
+          - 172.16.0.0/12
+          - 192.168.0.0/16
       rules:
         bantime: "24h"
         findtime: "5m"
