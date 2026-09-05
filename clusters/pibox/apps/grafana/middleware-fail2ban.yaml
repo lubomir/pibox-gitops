@@ -1,0 +1,23 @@
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: grafana-fail2ban
+  namespace: grafana
+spec:
+  plugin:
+    fail2ban:
+      allowlist:
+        ip:
+          - 10.0.0.0/8
+          - 172.16.0.0/12
+          - 192.168.0.0/16
+      rules:
+        bantime: "24h"
+        findtime: "5m"
+        maxretry: 5
+        statuscode: "302,401,403,404,429"
+        urlregexps:
+          - regexp: "/api/"
+            mode: allow
+        enabled: true

@@ -5,6 +5,7 @@ metadata:
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.middlewares: traefik-global-fail2ban@kubernetescrd
     traefik.ingress.kubernetes.io/router.tls: "true"
   name: rauthy-ingress
   namespace: rauthy
