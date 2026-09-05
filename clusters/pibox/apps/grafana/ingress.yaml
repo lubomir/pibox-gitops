@@ -5,6 +5,7 @@ metadata:
   name: grafana
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
+    traefik.ingress.kubernetes.io/router.middlewares: grafana-grafana-fail2ban@kubernetescrd
 spec:
   rules:
     - host: grafana.paas.lsedlar.cz
