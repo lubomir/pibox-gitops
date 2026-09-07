@@ -101,6 +101,7 @@ restic backup \
 # --- 5. Prune old snapshots ---
 log "Pruning old backups"
 restic forget \
+    --group-by host \
     --keep-daily 7 \
     --keep-weekly 4 \
     --keep-monthly 6 \
