@@ -18,7 +18,7 @@ Two middleware instances exist, both `fail2ban` plugin configs:
 | Middleware | Namespace | File | Notes |
 |---|---|---|---|
 | `global-fail2ban` | `traefik` | `clusters/pibox/apps/traefik/middleware-fail2ban.yaml` | Strict, used by most apps |
-| `grafana-fail2ban` | `grafana` | `clusters/pibox/apps/grafana/middleware-fail2ban.yaml` | Same rules + relaxed for Grafana API |
+| `grafana-fail2ban` | `grafana` | `clusters/pibox/apps/grafana/middleware-fail2ban.yaml` | Same rules but excludes 401 from status codes |
 
 ## How the middleware is attached
 
