@@ -50,8 +50,10 @@ trap cleanup EXIT INT TERM
 # creating containers.
 sleep 1
 
-# Signal to forgejo that dind is ready.
+# Signal to forgejo that dind is ready and give it time to start.
 touch /certs/ready
+
+wait 30
 
 echo "Watching for Forgejo Actions containers..."
 
