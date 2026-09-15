@@ -30,9 +30,9 @@ spec:
               - sh
               - -c
               - |
-                while ! nc -z localhost 2376 ; do
-                  echo 'waiting for docker daemon...'
-                  sleep 6
+                while [ ! -e /certs/ready ]; do
+                    echo 'waiting for docker daemon...'
+                    sleep 6
                 done
                 cp /secret/RUNNER_CONFIG /data/.runner
                 exec forgejo-runner -c /config/config.yaml one-job
@@ -67,26 +67,7 @@ spec:
             command:
               - sh
               - -c
-              - |
-                START_TIME="$(date -Iseconds)"
-
-                dockerd-entrypoint.sh 2>&1 &
-
-                # Give forgejo a moment to start
-                sleep 30
-
-                while pgrep forgejo-runner 2>/dev/null >/dev/null; do
-                    sleep 10
-                    echo "watching main job execution"
-                done
-
-                sleep 10
-
-                echo "main container exited, running cleanup"
-                /scripts/docker-image-lru.sh "$START_TIME" || echo "cleanup failed, continuing"
-
-                echo "cleanup done, stopping dind"
-                exit 0
+              - /scripts/dind-entrypoint.sh
             env:
               - name: DOCKER_TLS_CERTDIR
                 value: /certs
@@ -95,9 +76,9 @@ spec:
                 mountPath: /var/lib/docker
               - name: docker-certs
                 mountPath: /certs
-              - name: cleanup-script
-                mountPath: /scripts/docker-image-lru.sh
-                subPath: docker-image-lru.sh
+              - name: dind-entrypoint
+                mountPath: /scripts/dind-entrypoint.sh
+                subPath: dind-entrypoint.sh
                 readOnly: true
         volumes:
           - name: runner-data
@@ -114,10 +95,11 @@ spec:
               claimName: forgejo-dind-storage
           - name: docker-certs
             emptyDir: {}
-          - name: cleanup-script
+          - name: dind-entrypoint
             configMap:
-              name: runner-dind-cleanup
+              name: dind-entrypoint
               defaultMode: 0755
+
   pollingInterval: 30
   successfulJobsHistoryLimit: 3
   failedJobsHistoryLimit: 3
