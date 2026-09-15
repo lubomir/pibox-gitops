@@ -1,0 +1,28 @@
+---
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - deployment-runner.yaml
+  - deployment.yaml
+  - forgejo-db-user.yaml
+  - forgejo-db.yaml
+  - forgejo-keda-secret.yaml
+  - forgejo-runner-secret.yaml
+  - forgejo-secret.yaml
+  - ingress.yaml
+  - pvc.yaml
+  - runner-config.yaml
+  - scaledobject.yaml
+  - service.yaml
+
+generatorOptions:
+  labels:
+    app: forgejo-runner
+
+configMapGenerator:
+  - name: dind-entrypoint
+    options:
+      disableNameSuffixHash: true
+    files:
+      - dind-entrypoint.sh=scripts/dind-entrypoint.sh
