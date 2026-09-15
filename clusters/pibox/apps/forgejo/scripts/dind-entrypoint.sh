@@ -53,7 +53,7 @@ sleep 1
 # Signal to forgejo that dind is ready and give it time to start.
 touch /certs/ready
 
-wait 30
+sleep 30
 
 echo "Watching for Forgejo Actions containers..."
 
