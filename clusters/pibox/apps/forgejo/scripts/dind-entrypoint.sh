@@ -119,7 +119,7 @@ while IFS= read -r container_id; do
             ;;
     esac
 
-    ts_clean="$(printf '%s\n' "$ts" | sed 's/\.[0-9][0-9]*//')"
+    ts_clean="$(printf '%s\n' "$ts" | sed -e 's/T/ /' -e 's/\.[0-9][0-9]*//' -e 's/Z$//')"
     ts_sec="$(date -d "$ts_clean" +%s)"
     age=$((now - ts_sec))
 
