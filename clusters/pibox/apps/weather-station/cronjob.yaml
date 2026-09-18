@@ -28,8 +28,7 @@ spec:
               limits:
                 memory: 256Mi
             command:
-            - /app/.venv/bin/python
-            - /app/downsampler.py
+            - /app/.venv/bin/receiver-downsampler
             env:
             - name: DATABASE_URL
               valueFrom:
