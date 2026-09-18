@@ -119,7 +119,8 @@ while IFS= read -r container_id; do
             ;;
     esac
 
-    ts_sec="$(date -d "$ts" +%s)"
+    ts_clean="$(printf '%s\n' "$ts" | sed 's/\.[0-9][0-9]*//')"
+    ts_sec="$(date -d "$ts_clean" +%s)"
     age=$((now - ts_sec))
 
     if [ "$age" -lt "$max_age_sec" ]; then
