@@ -77,7 +77,7 @@ spec:
             secretKeyRef:
               key: deviceIP
               name: weather-station-secret
-        image: docker.io/lsedlar/weather-station-receiver:2.0.2@sha256:10c2fd7bb5cdec9067375586da382e53dbd14924cda9d5b57f71b3b36eb094b8
+        image: docker.io/lsedlar/weather-station-receiver:2.0.3@sha256:685b252cf784bcac9c83a682973da2a4fc337b9c23511742984e8fdcfbc29f73
         imagePullPolicy: IfNotPresent
         name: receiver
         securityContext:
