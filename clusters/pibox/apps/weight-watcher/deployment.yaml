@@ -26,7 +26,7 @@ spec:
             secretKeyRef:
               key: authToken
               name: weight-watcher-secret
-        image: docker.io/lsedlar/weight-watcher-rs:0.4.11@sha256:aa0550040eca10ace207bc28a202564f504268678098797d87b1e46506b25f2f
+        image: docker.io/lsedlar/weight-watcher-rs:0.4.14@sha256:27676ea3696599e76c8fb275241b32b17e7b88b21908d0aa7b7ab2ac22f10294
         imagePullPolicy: IfNotPresent
         name: weight-watcher
         securityContext:
