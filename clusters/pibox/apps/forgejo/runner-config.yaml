@@ -23,7 +23,7 @@ data:
       fetch_interval: 2s
       report_interval: 1s
       labels:
-        - "docker:docker://docker.io/library/node:24.22.2-bookworm@sha256:e7add2a490bb17d97b485b8641bd88455fff7839ade0f5eba493c3508124d413"
+        - "docker:docker://docker.io/library/node:26.13.0-bookworm@sha256:fa52d1669505e29b58c042875b1d65c229e0787a3610fd52869b22b68e480853"
     cache:
       enabled: true
       dir: /data/cache
