@@ -15,6 +15,18 @@ data:
     from: ArgoCD <lubomir.sedlar+argocd@gmail.com>
     username: $email-username
     password: $email-password
+  template.app-sync-failed: |
+    email:
+      subject: Failed to sync application {{.app.metadata.name}}
+    message: |
+      The sync operation of application {{.app.metadata.name}} has failed: {{.app.status.operationState.message}}
+      Application details: {{.context.argocdUrl}}/applications/{{.app.metadata.name}}
+  template.app-health-degraded: |
+    email:
+      subject: Application {{.app.metadata.name}} has degraded
+    message: |
+      Application {{.app.metadata.name}} has health status {{.app.status.health.status}}.
+      Application details: {{.context.argocdUrl}}/applications/{{.app.metadata.name}}
   trigger.on-sync-failed: |
     - description: Application syncing has failed
       send: [app-sync-failed]
