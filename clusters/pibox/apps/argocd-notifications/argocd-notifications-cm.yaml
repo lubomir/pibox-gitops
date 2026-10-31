@@ -17,20 +17,14 @@ data:
     password: $email-password
   trigger.on-sync-failed: |
     - description: Application syncing has failed
-      send:
-        - email:
-            to: '{{.recipient}}'
+      send: [app-sync-failed]
       when: app.status.operationState.phase in ['Error', 'Failed'] and app.status.operationState.operation.sync is not None
     - description: Application sync was terminated
-      send:
-        - email:
-            to: '{{.recipient}}'
+      send: [app-sync-failed]
       when: app.status.operationState.phase in ['Terminating'] and app.status.operationState.operation.sync is not None
   trigger.on-health-degraded: |
     - description: Application has degraded
-      send:
-        - email:
-            to: '{{.recipient}}'
+      send: [app-health-degraded]
       when: app.status.health.status == 'Degraded'
   subscriptions: |
     - recipients:
