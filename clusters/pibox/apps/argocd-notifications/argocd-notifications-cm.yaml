@@ -18,10 +18,10 @@ data:
   trigger.on-sync-failed: |
     - description: Application syncing has failed
       send: [app-sync-failed]
-      when: app.status.operationState.phase in ['Error', 'Failed'] and app.status.operationState.operation.sync is not None
+      when: app.status.operationState != nil and app.status.operationState.phase in ['Error', 'Failed']
     - description: Application sync was terminated
       send: [app-sync-failed]
-      when: app.status.operationState.phase in ['Terminating'] and app.status.operationState.operation.sync is not None
+      when: app.status.operationState != nil and app.status.operationState.phase in ['Terminating']
   trigger.on-health-degraded: |
     - description: Application has degraded
       send: [app-health-degraded]
