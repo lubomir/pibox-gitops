@@ -19,14 +19,31 @@ data:
     email:
       subject: Failed to sync application {{.app.metadata.name}}
     message: |
-      The sync operation of application {{.app.metadata.name}} has failed: {{.app.status.operationState.message}}
-      Application details: {{.context.argocdUrl}}/applications/{{.app.metadata.name}}
+      Application: {{.app.metadata.name}} ({{.app.spec.project}})
+      Sync: {{.app.status.sync.status}} ({{.app.status.sync.revision}})
+      Source: {{.app.spec.source.repoURL}} / {{.app.spec.source.path}}
+      Destination: {{.app.spec.destination.namespace}}
+      Operation: {{.app.status.operationState.phase}} - {{.app.status.operationState.message}}
+      Started: {{.app.status.operationState.startedAt}}
+      Finished: {{.app.status.operationState.finishedAt}}
+      {{- if .context.argocdUrl }}
+      Details: {{.context.argocdUrl}}/applications/{{.app.metadata.name}}
+      {{- end }}
   template.app-health-degraded: |
     email:
       subject: Application {{.app.metadata.name}} has degraded
     message: |
-      Application {{.app.metadata.name}} has health status {{.app.status.health.status}}.
-      Application details: {{.context.argocdUrl}}/applications/{{.app.metadata.name}}
+      Application: {{.app.metadata.name}} ({{.app.spec.project}})
+      Health: {{.app.status.health.status}} since {{.app.status.health.lastTransitionTime}}
+      Sync: {{.app.status.sync.status}} ({{.app.status.sync.revision}})
+      Source: {{.app.spec.source.repoURL}} / {{.app.spec.source.path}}
+      Destination: {{.app.spec.destination.namespace}}
+      {{- if .app.status.operationState }}
+      Last operation: {{.app.status.operationState.phase}} - {{.app.status.operationState.message}} ({{.app.status.operationState.finishedAt}})
+      {{- end }}
+      {{- if .context.argocdUrl }}
+      Details: {{.context.argocdUrl}}/applications/{{.app.metadata.name}}
+      {{- end }}
   trigger.on-sync-failed: |
     - description: Application syncing has failed
       send: [app-sync-failed]
