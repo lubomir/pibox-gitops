@@ -135,6 +135,9 @@ while IFS= read -r container_id; do
     docker rm "$container_id"
 done
 
+echo "Pruning unused networks..."
+docker network prune -f || echo "Network prune failed"
+
 echo "Pruning stale images..."
 
 find "$STATE_DIR" \
