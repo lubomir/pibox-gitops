@@ -21,7 +21,7 @@ spec:
         fsGroup: 472
       containers:
         - name: grafana
-          image: docker.io/grafana/grafana:13.2.0@sha256:3fd54ae1214669f8355f065ec9f6445d5279a3d77095ab048ca045685272429b
+          image: docker.io/grafana/grafana:13.3.2@sha256:81556409ba48b2b922e0adb69a2511337d8ba7578f11962eefa6149a2d815101
           securityContext:
             runAsNonRoot: true
             runAsUser: 472
