@@ -15,7 +15,7 @@ spec:
             fsGroup: 1000
           containers:
           - name: downsample
-            image: docker.io/lsedlar/weather-station-receiver:2.1.6@sha256:7a8ef949badf04c6a3970e23c1bcf685d6eb332a599530e29f68b569628b87df
+            image: docker.io/lsedlar/weather-station-receiver:2.1.7@sha256:eaadef18fc4c071bd0680a75bc77f86f7afd0decec9ac92c52693bdd6c3a0615
             imagePullPolicy: IfNotPresent
             securityContext:
               runAsNonRoot: true
