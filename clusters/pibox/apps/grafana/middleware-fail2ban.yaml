@@ -15,6 +15,6 @@ spec:
       rules:
         bantime: "24h"
         findtime: "5m"
-        maxretry: 5
+        maxretry: 12
         statuscode: "302,403,404,429"
         enabled: true
