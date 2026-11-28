@@ -38,6 +38,11 @@ spec:
           env:
             - name: GF_PATHS_CONFIG
               value: /etc/grafana/grafana.ini
+            - name: GF_SECURITY_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: grafana-secret-key-secret
+                  key: SECRET_KEY
             - name: GF_INSTALL_PLUGINS
               value: grafana-kubernetes-app
             - name: GF_SMTP_ENABLED
