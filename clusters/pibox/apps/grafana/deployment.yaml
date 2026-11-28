@@ -43,8 +43,6 @@ spec:
                 secretKeyRef:
                   name: grafana-secret-key-secret
                   key: SECRET_KEY
-            - name: GF_INSTALL_PLUGINS
-              value: grafana-kubernetes-app
             - name: GF_SMTP_ENABLED
               value: "true"
             - name: GF_SMTP_HOST
